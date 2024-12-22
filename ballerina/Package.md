@@ -82,7 +82,7 @@ Before proceeding with the Quickstart, ensure you have obtained the Access Token
    https://app.hubspot.com/oauth/authorize?client_id=<YOUR_CLIENT_ID>&scope=<YOUR_SCOPES>&redirect_uri=<YOUR_REDIRECT_URI>
    ```
 
-    Alternatively you can get it from Hubspot App.
+    Alternatively the link can be obtained from Hubspot.
 
     <img src=../docs/setup/resources/get_auth_code.png alt="Hubspot get auth code" style="width: 70%;">
 
