@@ -1,6 +1,13 @@
 ## Overview
 
-[//]: # (TODO: Add overview mentioning the purpose of the module, supported REST API versions, and other high-level details.)
+[//]: # "TODO: Add overview mentioning the purpose of the module, supported REST API versions, and other high-level details."
+
+[HubSpot](https://www.hubspot.com/our-story) is a customer platform with all the software, integrations, and resources users need to connect thier marketing, sales, and customer service.
+
+The `ballerinax/hubspot.crm.object.leads` package offers APIs to connect and interact with [HubSpot API for Leads](https://developers.hubspot.com/docs/reference/api/crm/objects/leads) endpoints, specifically based on [HubSpot Leads API v3 OpenAPI spec](https://github.com/HubSpot/HubSpot-public-api-spec-collection/blob/main/PublicApiSpecs/CRM/Schemas/Rollouts/145900/v3/schemas.json).
+
+Using this API, users can develop applications easily to create and manage lead records in HubSpot, as well as sync lead data between HubSpot and other systems.
+
 
 ## Setup guide
 
