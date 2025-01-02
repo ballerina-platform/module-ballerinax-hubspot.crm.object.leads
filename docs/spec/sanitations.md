@@ -10,9 +10,13 @@ The OpenAPI specification is obtained from (TODO: Add source link).
 These changes are done in order to improve the overall usability, and as workarounds for some known language limitations.
 
 [//]: # (TODO: Add sanitation details)
-1. 
-2. 
-3. 
+1. **Update API Paths**:
+   - **Original**: Paths included the version prefix in each endpoint (e.g., `/crm/v3/objects/leads`).
+   - **Updated**: Paths are modified to remove the version prefix and path prefix from the endpoints, as it is now included in the base URL. For example:
+     - **Original**: `/crm/v3/objects/leads/batch/read`
+     - **Updated**: `/batch/read`
+   - **Reason**: This modification simplifies the API paths, making them shorter and more readable. It also centralizes the versioning to the base URL, which is a common best practice.
+
 
 ## OpenAPI cli command
 
