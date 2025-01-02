@@ -8,7 +8,7 @@ import ballerina/test;
 configurable string clientId = ?;
 configurable string clientSecret = ?;
 configurable boolean isLiveServer = ?;
-configurable string serviceUrl = isLiveServer ? "https://api.hubapi.com" : "http://localhost:9090/mock";
+configurable string serviceUrl = isLiveServer ? "https://api.hubapi.com/crm/v3/objects/leads" : "http://localhost:9090/mock";
 configurable string refreshToken = "test";
 
 OAuth2RefreshTokenGrantConfig auth = {
@@ -23,7 +23,7 @@ final Client _client = check new Client(config, serviceUrl);
 
 @test:Config {}
 function testGetLeads() returns error? {
-    CollectionResponseSimplePublicObjectWithAssociationsForwardPaging response = check _client->/crm/v3/objects/leads.get();
+    var response = check _client->/.get();
     io:println(response);
     test:assertEquals(response.results.length(), 2, msg = "Invalid number of leads returned.");
     test:assertEquals(response.results[0].id, "lead_id_1", msg = "Invalid lead ID.");

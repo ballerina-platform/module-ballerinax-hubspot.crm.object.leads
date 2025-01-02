@@ -244,6 +244,17 @@ public type AssociationSpec record {
     int:Signed32 associationTypeId;
 };
 
+public type SimplePublicObjectWithAssociations record {
+    record {|CollectionResponseAssociatedId...;|} associations?;
+    string createdAt;
+    boolean archived?;
+    string archivedAt?;
+    record {|ValueWithTimestamp[]...;|} propertiesWithHistory?;
+    string id;
+    record {|string?...;|} properties;
+    string updatedAt;
+};
+
 # Represents the Queries record for the operation: get-/crm/v3/objects/leads_getPage
 public type GetCrmV3ObjectsLeads_getpageQueries record {
     # A comma separated list of object types to retrieve associated IDs for. If any of the specified associations do not exist, they will be ignored.
@@ -258,17 +269,6 @@ public type GetCrmV3ObjectsLeads_getpageQueries record {
     string after?;
     # A comma separated list of the properties to be returned in the response. If any of the specified properties are not present on the requested object(s), they will be ignored.
     string[] properties?;
-};
-
-public type SimplePublicObjectWithAssociations record {
-    record {|CollectionResponseAssociatedId...;|} associations?;
-    string createdAt;
-    boolean archived?;
-    string archivedAt?;
-    record {|ValueWithTimestamp[]...;|} propertiesWithHistory?;
-    string id;
-    record {|string?...;|} properties;
-    string updatedAt;
 };
 
 public type Filter record {
@@ -295,12 +295,12 @@ public type PreviousPage record {
     string link?;
 };
 
-public type BatchInputSimplePublicObjectInputForCreate record {
-    SimplePublicObjectInputForCreate[] inputs;
-};
-
 public type BatchInputSimplePublicObjectBatchInput record {
     SimplePublicObjectBatchInput[] inputs;
+};
+
+public type BatchInputSimplePublicObjectInputForCreate record {
+    SimplePublicObjectInputForCreate[] inputs;
 };
 
 public type SimplePublicUpsertObject record {
