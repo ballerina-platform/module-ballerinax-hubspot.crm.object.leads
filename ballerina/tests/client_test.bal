@@ -1,14 +1,11 @@
-import ballerina/io;
-// //import ballerina/http;
 import ballerina/oauth2;
 import ballerina/test;
-
-// //import ballerina/io;
+import ballerina/http;
+//import ballerina/io;
 
 configurable string clientId = ?;
 configurable string clientSecret = ?;
-configurable boolean isLiveServer = ?;
-configurable string serviceUrl = isLiveServer ? "https://api.hubapi.com/crm/v3/objects/leads" : "http://localhost:9090/mock";
+configurable string serviceUrl = "https://api.hubapi.com/crm/v3/objects/leads";
 configurable string refreshToken = "test";
 
 OAuth2RefreshTokenGrantConfig auth = {
@@ -21,130 +18,201 @@ OAuth2RefreshTokenGrantConfig auth = {
 ConnectionConfig config = {auth: auth};
 final Client _client = check new Client(config, serviceUrl);
 
+string testLeadCreatedId = "";
+int testLeadCount = 0;
+
 @test:Config {}
+function testCreateLead() returns error? {
+    SimplePublicObjectInputForCreate payload = {
+        "associations": [
+            {
+                "types": [
+                    {
+                        "associationCategory": "HUBSPOT_DEFINED",
+                        "associationTypeId": 578
+                    }
+                ],
+                "to": {
+                    "id": "85187963930"
+                }
+            }
+        ],
+        "objectWriteTraceId": "string",
+        "properties": {
+            "hs_lead_name": "Jane Doe"
+        }
+    };
+
+    SimplePublicObject response = check _client->/.post(payload);
+    test:assertNotEquals(response.id, "", msg = "Lead creation failed: Missing ID.");
+    test:assertEquals(response.properties["hs_lead_name"], payload.properties["hs_lead_name"], msg = "Invalid lead name.");
+    testLeadCreatedId = response.id;
+}
+
+@test:Config {dependsOn: [testCreateLead]}
 function testGetLeads() returns error? {
-    var response = check _client->/.get();
-    io:println(response);
-    test:assertEquals(response.results.length(), 2, msg = "Invalid number of leads returned.");
-    test:assertEquals(response.results[0].id, "lead_id_1", msg = "Invalid lead ID.");
+    CollectionResponseSimplePublicObjectWithAssociationsForwardPaging response = check _client->/.get();
+    test:assertNotEquals(response.results.length(), 0, msg = "Invalid number of leads returned.");
+    test:assertTrue(response.results[0].id != "", msg = "Invalid lead ID.");
+    testLeadCount = response.results.length();
+}
+
+@test:Config {dependsOn: [testCreateLead]}
+function testGetLeadById() returns error? {
+    string leadsId = testLeadCreatedId;
+    SimplePublicObjectWithAssociations response = check _client->/[leadsId].get();
+    test:assertEquals(response.id, leadsId, msg = "Invalid lead ID.");
+    test:assertNotEquals(response.properties, (), msg = "Lead retrieval failed: Missing properties.");
+}
+
+@test:Config {dependsOn: [testGetLeadById]}
+function testUpdateLead() returns error? {
+    SimplePublicObjectInput payload = {
+        "objectWriteTraceId": "string",
+        "properties": {
+            "hs_lead_name": "John Doe"
+        }
+    };
+
+    SimplePublicObject response = check _client->/[testLeadCreatedId].patch(payload);
+    // io:println("update:",response,"\n");
+
+    GetCrmV3ObjectsLeadsLeadsid_getbyidQueries query = {
+        "properties": ["hs_lead_name"]
+    };
+    test:assertEquals(response.properties["hs_lead_name"], payload.properties["hs_lead_name"], msg = "Invalid lead name.");
+    SimplePublicObjectWithAssociations _response = check _client->/[testLeadCreatedId].get({}, query);
+    test:assertEquals(_response.properties["hs_lead_name"], payload.properties["hs_lead_name"], msg = "Invalid lead name.");
+}
+
+@test:Config {dependsOn: [testGetLeadById]}
+function testDeleteLead() returns error? {
+    http:Response response = check _client->/[testLeadCreatedId].delete();
+    test:assertEquals(response.statusCode,204, msg = "Lead deletion failed.");
 }
 
 // @test:Config {}
-// function testGetLeadById() returns error? {
-//     CollectionResponseSimplePublicObjectWithAssociationsForwardPaging response = check _client->/crm/v3/objects/leads.get({"leadsId": "lead_id_1"});
-//     io:println(response);
-//     //test:assertEquals(response.id, "lead_id_1", msg = "Invalid lead ID.");
+// function testDeleteAll() returns error? {
+//     CollectionResponseSimplePublicObjectWithAssociationsForwardPaging response = check _client->/.get(archived = true);
+//     io:println("delete all:",response.results.length(),"\n");
+//     foreach var lead in response.results {
+//         http:Response deleteResponse = check _client->/[lead.id].delete({
+//             "archived": "true"
+//         });
+//         io:println(lead.id," ", deleteResponse.statusCode,"\n");
+//         test:assertEquals(deleteResponse.statusCode,204, msg = "Lead deletion failed.");
+//     }
 // }
 
-// @test:Config {}
-// function testCreateLead() returns error? {
-//     SimplePublicObjectInputForCreate payload = {
-//         "associations": [
-//             {
-//                 "types": [
-//                     {
-//                         "associationCategory": "HUBSPOT_DEFINED",
-//                         "associationTypeId": 578
-//                     }
-//                 ],
-//                 "to": {
-//                     "id": "85187963930"
-//                 }
-//             }
-//         ],
-//         "objectWriteTraceId": "string",
-//         "properties": {}
-//     };
+string[] testBatchCreateIds = [];
+@test:Config {}
+function testBatchCreateLeads() returns error? {
+    BatchInputSimplePublicObjectInputForCreate payload = {
+        inputs: [
+            {
+        "associations": [
+            {
+                "types": [
+                    {
+                        "associationCategory": "HUBSPOT_DEFINED",
+                        "associationTypeId": 578
+                    }
+                ],
+                "to": {
+                    "id": "85187963930"
+                }
+            }
+        ],
+        "properties": {
+            "hs_lead_name": "John Doe"
+        }
+    },
+    {
+        "associations": [
+            {
+                "types": [
+                    {
+                        "associationCategory": "HUBSPOT_DEFINED",
+                        "associationTypeId": 578
+                    }
+                ],
+                "to": {
+                    "id": "85191276972"
+                }
+            }
+        ],
+        "properties": {
+            "hs_lead_name": "John ohn"
+        }
+    }
+        ]
+    };
+    BatchResponseSimplePublicObject response = check _client->/batch/create.post(payload);
+    foreach var item in response.results {
+        testBatchCreateIds.push(item.id);     
+    }
+    test:assertEquals(response.results.length(), 2, msg = "Batch lead creation failed.");
+}
 
-//     SimplePublicObject response = check _client->/crm/v3/objects/leads.post(payload);
-//     io:println(response);
+@test:Config {dependsOn: [testBatchCreateLeads]}
+function testBatchReadLeads() returns error? {
+    BatchReadInputSimplePublicObjectId payload = {
+        inputs: [{ id: testBatchCreateIds[0]}, { id: testBatchCreateIds[1] }],
+        properties: ["hs_lead_name"],
+        propertiesWithHistory: []
+    };
+    BatchResponseSimplePublicObject response = check _client->/batch/read.post(payload);
+    test:assertEquals(response.results.length(), 2, msg = "Batch lead read failed.");
+}
 
-//     // Validate response
-//     //test:assertNotEquals(response.id, "", msg = "Lead creation failed: Missing ID.");
-//     //test:assertEquals(response.properties["firstname"], payload.properties["firstname"], msg = "Invalid lead firstname.");
-//     //test:assertEquals(response.properties["email"], payload.properties["email"], msg = "Invalid lead email.");
-//     //test:assertEquals(response.properties["company"], payload.properties["company"], msg = "Invalid lead company.");
-// }
+@test:Config {dependsOn: [testBatchReadLeads]}
+function testBatchUpdateLeads() returns error? {
+    BatchInputSimplePublicObjectBatchInput payload = {
+        inputs: [
+            { id: testBatchCreateIds[0], properties: { "hs_lead_name": "John Updated" } },
+            { id: testBatchCreateIds[1], properties: { "hs_lead_name": "Ohn Updated" } }
+        ]
+    };
+    BatchResponseSimplePublicObject response = check _client->/batch/update.post(payload);
+    test:assertEquals(response.results.length(), 2, msg = "Batch lead update failed.");
+    map<string> idToNameMap = { 
+        [testBatchCreateIds[0]]: payload.inputs[0].properties["hs_lead_name"].toString(), 
+        [testBatchCreateIds[1]]: payload.inputs[1].properties["hs_lead_name"].toString()
+    };
 
-// @test:Config {}
-// function testUpdateLead() returns error? {
-//     SimplePublicObjectInput payload = {
-//         properties: { "name": "Updated Lead", "email": "updatedlead@example.com" }
-//     };
-//     var response = check _client->/crm/v3/objects/leads/["lead_id_1"].patch(payload);
-//     test:assertEquals(response.id, "lead_id_1", msg = "Lead update failed.");
-//     test:assertEquals(response.properties["name"], payload.properties["name"], msg = "Invalid lead name.");
-// }
+    foreach var result in response.results {
+        test:assertEquals(result.properties["hs_lead_name"], idToNameMap[result.id], msg = "Invalid lead name.");
+    }
+}
 
-// @test:Config {}
-// function testDeleteLead() returns error? {
-//     http:Response response = check _client->/crm/v3/objects/leads/["lead_id_1"].delete();
-//     test:assertEquals(response.statusCode, 200, msg = "Lead deletion failed.");
-// }
+@test:Config {dependsOn: [testBatchUpdateLeads]}
+function testSearchLeads() returns error? {
+    PublicObjectSearchRequest payload = {
+        query: "John",
+        properties: ["hs_lead_name"]
+    };
+    CollectionResponseWithTotalSimplePublicObjectForwardPaging response = check _client->/search.post(payload);
+    test:assertNotEquals(response.total, 0, msg = "Lead search failed.");
+    test:assertNotEquals(response.results.length(), 0, msg = "Lead search failed.");
+}
 
-// @test:Config {}
-// function testBatchArchiveLeads() returns error? {
-//     BatchInputSimplePublicObjectId payload = {
-//         inputs: [{ id: "lead_id_1" }, { id: "lead_id_2" }]
-//     };
-//     http:Response result = check _client->/crm/v3/objects/leads/batch/archive.post(payload);
-//     test:assertEquals(result.statusCode, 201, msg = "Batch lead archive failed.");
-// }
-
-// @test:Config {}
-// function testBatchCreateLeads() returns error? {
-//     BatchInputSimplePublicObjectInputForCreate payload = {
-//         inputs: [
-//             { properties: { "name": "Lead One", "email": "leadone@example.com" }, associations: [] },
-//             { properties: { "name": "Lead Two", "email": "leadtwo@example.com" }, associations: [] },
-//             { properties: { "name": "Lead Three", "email": "leadthree@example.com" }, associations: [] }
-//         ]
-//     };
-//     var response = check _client->/crm/v3/objects/leads/batch/create.post(payload);
-//     test:assertEquals(response.results.length(), 3, msg = "Batch lead creation failed.");
-// }
-
-// @test:Config {}
-// function testBatchReadLeads() returns error? {
-//     BatchReadInputSimplePublicObjectId payload = {
-//         inputs: [{ id: "lead_id_1" }, { id: "lead_id_2" }],
-//         properties: ["name", "email"],
-//         propertiesWithHistory: []
-//     };
-//     var response = check _client->/crm/v3/objects/leads/batch/read.post(payload);
-//     test:assertEquals(response.results.length(), 2, msg = "Batch lead read failed.");
-// }
-
-// @test:Config {}
-// function testBatchUpdateLeads() returns error? {
-//     BatchInputSimplePublicObjectBatchInput payload = {
-//         inputs: [
-//             { id: "lead_id_1", properties: { "name": "Updated Lead One", "email": "updatedleadone@example.com" } },
-//             { id: "lead_id_2", properties: { "name": "Updated Lead Two", "email": "updatedleadtwo@example.com" } }
-//         ]
-//     };
-//     var response = check _client->/crm/v3/objects/leads/batch/update.post(payload);
-//     test:assertEquals(response.results.length(), 2, msg = "Batch lead update failed.");
-// }
-
-// @test:Config {}
+// @test:Config {dependsOn: [testSearchLeads]}
 // function testBatchUpsertLeads() returns error? {
 //     BatchInputSimplePublicObjectBatchInputUpsert payload = {
 //         inputs: [
-//             { id: "lead_id_1", properties: { "name": "Upserted Lead One", "email": "upsertedleadone@example.com" } },
-//             { id: "lead_id_2", properties: { "name": "Upserted Lead Two", "email": "upsertedleadtwo@example.com" } }
+//             {idProperty: "hs_lead_name", id: "395042111139", properties: { "hs_lead_name": "John Doe Upsert" } }
 //         ]
 //     };
-//     var response = check _client->/crm/v3/objects/leads/batch/upsert.post(payload);
+//     BatchResponseSimplePublicUpsertObject response = check _client->/batch/upsert.post(payload);
 //     test:assertEquals(response.results.length(), 2, msg = "Batch lead upsert failed.");
 // }
 
-// @test:Config {}
-// function testSearchLeads() returns error? {
-//     PublicObjectSearchRequest payload = {
-//         query: "Lead",
-//         properties: ["name", "email"]
-//     };
-//     var response = check _client->/crm/v3/objects/leads/search.post(payload);
-//     test:assertEquals(response.results.length(), 2, msg = "Lead search failed.");
-// }
+@test:Config {dependsOn: [testSearchLeads]}
+function testBatchArchiveLeads() returns error? {
+    BatchInputSimplePublicObjectId payload = {
+        inputs: [{ id:  testBatchCreateIds[0] }, { id: testBatchCreateIds[1] }]
+    };
+
+    http:Response result = check _client->/batch/archive.post(payload);
+    test:assertEquals(result.statusCode, 204, msg = "Batch lead archive failed.");
+}
