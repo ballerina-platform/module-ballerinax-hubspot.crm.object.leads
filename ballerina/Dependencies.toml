@@ -313,7 +313,7 @@ modules = [
 
 [[package]]
 org = "ballerinax"
-name = "hubspot.crm.object.leads"
+name = "hubspot.crm.obj.leads"
 version = "0.1.0"
 dependencies = [
 	{org = "ballerina", name = "http"},
@@ -323,6 +323,6 @@ dependencies = [
 	{org = "ballerinai", name = "observe"}
 ]
 modules = [
-	{org = "ballerinax", packageName = "hubspot.crm.object.leads", moduleName = "hubspot.crm.object.leads"}
+	{org = "ballerinax", packageName = "hubspot.crm.obj.leads", moduleName = "hubspot.crm.obj.leads"}
 ]
 
