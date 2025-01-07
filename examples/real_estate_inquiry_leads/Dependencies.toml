@@ -8,20 +8,6 @@ dependencies-toml-version = "2"
 distribution-version = "2201.10.3"
 
 [[package]]
-org = "anushanga"
-name = "real_estate_inquiry_tracking"
-version = "0.1.0"
-dependencies = [
-	{org = "ballerina", name = "io"},
-	{org = "ballerina", name = "oauth2"},
-	{org = "ballerinai", name = "observe"},
-	{org = "ballerinax", name = "hubspot.crm.obj.leads"}
-]
-modules = [
-	{org = "anushanga", packageName = "real_estate_inquiry_tracking", moduleName = "real_estate_inquiry_tracking"}
-]
-
-[[package]]
 org = "ballerina"
 name = "auth"
 version = "2.12.0"
@@ -310,5 +296,19 @@ dependencies = [
 ]
 modules = [
 	{org = "ballerinax", packageName = "hubspot.crm.obj.leads", moduleName = "hubspot.crm.obj.leads"}
+]
+
+[[package]]
+org = "wso2"
+name = "real_estate_inquiry_leads"
+version = "0.1.0"
+dependencies = [
+	{org = "ballerina", name = "io"},
+	{org = "ballerina", name = "oauth2"},
+	{org = "ballerinai", name = "observe"},
+	{org = "ballerinax", name = "hubspot.crm.obj.leads"}
+]
+modules = [
+	{org = "wso2", packageName = "real_estate_inquiry_leads", moduleName = "real_estate_inquiry_leads"}
 ]
 
