@@ -6,7 +6,7 @@ import ballerina/http;
 configurable string clientId = ?;
 configurable string clientSecret = ?;
 configurable string serviceUrl = "https://api.hubapi.com/crm/v3/objects/leads";
-configurable string refreshToken = "test";
+configurable string refreshToken = ?;
 
 OAuth2RefreshTokenGrantConfig auth = {
     clientId: clientId,
