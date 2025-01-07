@@ -1,17 +1,11 @@
 ## Overview
 
-[//]: # "TODO: Add overview mentioning the purpose of the module, supported REST API versions, and other high-level details."
+"[HubSpot](https://www.hubspot.com/our-story) is an AI-powered customer relationship management (CRM) platform. 
 
-[HubSpot](https://www.hubspot.com/our-story) is a customer platform with all the software, integrations, and resources users need to connect thier marketing, sales, and customer service.
-
-The `ballerinax/hubspot.crm.object.leads` package offers APIs to connect and interact with [HubSpot API for Leads](https://developers.hubspot.com/docs/reference/api/crm/objects/leads) endpoints, specifically based on [HubSpot Leads API v3 OpenAPI spec](https://github.com/HubSpot/HubSpot-public-api-spec-collection/blob/main/PublicApiSpecs/CRM/Schemas/Rollouts/145900/v3/schemas.json).
-
-Using this API, users can develop applications easily to create and manage lead records in HubSpot, as well as sync lead data between HubSpot and other systems.
+The ballerinax/hubspot.crm.obj.leads offers APIs to connect and interact with the [HubSpot API for CRM Leads](https://developers.hubspot.com/docs/reference/api/crm/objects/leads) endpoints, specifically based on the [HubSpot CRM Leads API v3 OpenAPI spec](https://github.com/HubSpot/HubSpot-public-api-spec-collection/blob/main/PublicApiSpecs/CRM/Leads/Rollouts/424/v3/leads.json)"
 
 
 ## Setup guide
-
-[//]: # "TODO: Add detailed steps to obtain credentials and configure the module."
 
 To use the HubSpot Marketing Events connector, you must have access to the HubSpot API through a HubSpot developer account and a HubSpot App under it. Therefore you need to register for a developer account at HubSpot if you don't have one already.
 
@@ -134,8 +128,6 @@ Before proceeding with the Quickstart, ensure you have obtained the Access Token
 5. Store the access token securely for use in your application.
 
 ## Quickstart
-
-[//]: # (TODO: Add a quickstart guide to demonstrate a basic functionality of the module, including sample code snippets.)
 
 To use the `HubSpot CRM Leads Connector` in your Ballerina application, update the `.bal` file as follows:
 
