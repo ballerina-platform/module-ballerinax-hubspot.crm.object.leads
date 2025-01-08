@@ -166,7 +166,7 @@ import ballerina/oauth2;
         }
     };
 
-    final hsleads:Client hsleads = check new (hsleadsConfig, "https://api.hubapi.com");
+    final hsleads:Client hsleads = check new (hsleadsConfig);
     ```
 
 ### Step 3: Invoke the connector operation
@@ -193,18 +193,17 @@ public function main() returns error? {
             }
          ],
          "properties": {
-            "hs_lead_name": "Jane Doe",
-            "hs_lead_type": "NEW BUSINESS",
-            "hs_lead_label": "WARM"
+            "hs_lead_name": "John Doe"
          }
       }
    }
-   hsleads:SimplePublicObject createLead = check hsleads>/crm/v3/objects/leads.post(payload);
+   hsleads:SimplePublicObject createLead = check hsleads->/.post(payload);
 }
 ```
 
 ## Examples
 
-The `Ballerina HubSpot CRM Leads Connector` connector provides practical examples illustrating usage in various scenarios. Explore these [examples](https://github.com/module-ballerinax-hubspot.crm.object.leads/tree/main/examples/), covering the following use cases:
+The `Ballerina HubSpot CRM Leads Connector` connector provides practical examples illustrating usage in various scenarios. Explore these [examples](https://github.com/module-ballerinax-hubspot.crm.object.leads/tree/main/examples/real_estate_inquiry_leads/main.bal/), covering the following use cases:
 
-[//]: # (TODO: Add examples)
+- [Real Estate Inquiry Leads](https://github.com/anush47/module-ballerinax-hubspot.crm.object.leads/blob/main/examples/real_estate_inquiry_leads/main.bal)
+- [Fitness Center Leads](https://github.com/anush47/module-ballerinax-hubspot.crm.object.leads/blob/main/examples/fitness_center_leads/main.bal)
