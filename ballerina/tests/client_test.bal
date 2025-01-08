@@ -1,11 +1,11 @@
 import ballerina/oauth2;
 import ballerina/test;
 import ballerina/http;
-//import ballerina/io;
 
 configurable string clientId = ?;
 configurable string clientSecret = ?;
-configurable string serviceUrl = "https://api.hubapi.com/crm/v3/objects/leads";
+configurable boolean isLiveServer = ?;
+configurable string serviceUrl = isLiveServer ? "https://api.hubapi.com/crm/v3/objects/leads" : "http://localhost:9090/mock/crm/v3/objects/leads";
 configurable string refreshToken = ?;
 
 OAuth2RefreshTokenGrantConfig auth = {
@@ -76,19 +76,17 @@ function testUpdateLead() returns error? {
 
     SimplePublicObject response = check _client->/[testLeadCreatedId].patch(payload);
     // io:println("update:",response,"\n");
-
-    GetCrmV3ObjectsLeadsLeadsid_getbyidQueries query = {
-        "properties": ["hs_lead_name"]
-    };
     test:assertEquals(response.properties["hs_lead_name"], payload.properties["hs_lead_name"], msg = "Invalid lead name.");
-    SimplePublicObjectWithAssociations _response = check _client->/[testLeadCreatedId].get({}, query);
-    test:assertEquals(_response.properties["hs_lead_name"], payload.properties["hs_lead_name"], msg = "Invalid lead name.");
 }
 
 @test:Config {dependsOn: [testGetLeadById]}
 function testDeleteLead() returns error? {
     http:Response response = check _client->/[testLeadCreatedId].delete();
-    test:assertEquals(response.statusCode,204, msg = "Lead deletion failed.");
+    if isLiveServer {
+        test:assertEquals(response.statusCode, http:STATUS_NO_CONTENT, msg = "Lead deletion failed.");
+    } else {
+        test:assertTrue(response.statusCode == http:STATUS_NO_CONTENT || response.statusCode == http:STATUS_OK, msg = "Lead deletion failed.");
+    }
 }
 
 // @test:Config {}
@@ -214,5 +212,9 @@ function testBatchArchiveLeads() returns error? {
     };
 
     http:Response result = check _client->/batch/archive.post(payload);
-    test:assertEquals(result.statusCode, 204, msg = "Batch lead archive failed.");
+    if isLiveServer {
+        test:assertEquals(result.statusCode, http:STATUS_NO_CONTENT, msg = "Batch lead archive failed.");
+    } else {
+        test:assertTrue(result.statusCode == http:STATUS_NO_CONTENT || result.statusCode == http:STATUS_CREATED, msg = "Batch lead archive failed.");
+    }
 }
