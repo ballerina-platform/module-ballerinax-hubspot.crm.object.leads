@@ -2,13 +2,19 @@
 
 The `ballerinax/hubspot.crm.object.leads` connector provides practical examples illustrating usage in various scenarios.
 
-[//]: # (TODO: Add examples)
-1. 
-2. 
+- [Real Estate Inquiry Leads](https://github.com/anush47/module-ballerinax-hubspot.crm.object.leads/blob/main/examples/real_estate_inquiry_leads)
+- [Fitness Center Leads](https://github.com/anush47/module-ballerinax-hubspot.crm.object.leads/blob/main/examples/fitness_center_leads)
 
 ## Prerequisites
 
-[//]: # (TODO: Add prerequisites)
+1. Create a huspot application to authenticate the connecter as described in the [Setup guide](../ballerina/Package.md)
+2. For each example, create a `Config.toml` file the related configuration. Here's an example of how your `Config.toml` file should look:
+
+    ```toml
+    clientId = "<Client Id>"
+    clientSecret = "<Client Secret>"
+    refreshToken = "<Refresh Token>"
+    ```
 
 ## Running an example
 
