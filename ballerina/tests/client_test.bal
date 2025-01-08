@@ -16,7 +16,7 @@ OAuth2RefreshTokenGrantConfig auth = {
 };
 
 ConnectionConfig config = {auth: auth};
-final Client _client = check new Client(config, serviceUrl);
+final Client _client = check new (config, serviceUrl);
 
 string testLeadCreatedId = "";
 int testLeadCount = 0;
@@ -88,19 +88,6 @@ function testDeleteLead() returns error? {
         test:assertTrue(response.statusCode == http:STATUS_NO_CONTENT || response.statusCode == http:STATUS_OK, msg = "Lead deletion failed.");
     }
 }
-
-// @test:Config {}
-// function testDeleteAll() returns error? {
-//     CollectionResponseSimplePublicObjectWithAssociationsForwardPaging response = check _client->/.get(archived = true);
-//     io:println("delete all:",response.results.length(),"\n");
-//     foreach var lead in response.results {
-//         http:Response deleteResponse = check _client->/[lead.id].delete({
-//             "archived": "true"
-//         });
-//         io:println(lead.id," ", deleteResponse.statusCode,"\n");
-//         test:assertEquals(deleteResponse.statusCode,204, msg = "Lead deletion failed.");
-//     }
-// }
 
 string[] testBatchCreateIds = [];
 @test:Config {}
