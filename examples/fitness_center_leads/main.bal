@@ -1,7 +1,7 @@
+import ballerina/http;
 import ballerina/io;
 import ballerina/oauth2;
 import ballerinax/hubspot.crm.obj.leads as leads;
-import ballerina/http;
 
 // Configuration variables
 configurable string clientId = ?;
@@ -61,7 +61,7 @@ function batchUpdateLeads(string[] leadIds, string[] leadNames) returns leads:Ba
         inputs: from int i in 0 ..< leadIds.length()
             select {
                 id: leadIds[i],
-                properties: { "hs_lead_name": leadNames[i] }
+                properties: {"hs_lead_name": leadNames[i]}
             }
     };
     return leadClient->/batch/update.post(payload);
@@ -69,7 +69,7 @@ function batchUpdateLeads(string[] leadIds, string[] leadNames) returns leads:Ba
 
 function batchReadLeads(string leadId1, string leadId2) returns leads:BatchResponseSimplePublicObject|error {
     leads:BatchReadInputSimplePublicObjectId payload = {
-        inputs: [{ id: leadId1 }, { id: leadId2 }],
+        inputs: [{id: leadId1}, {id: leadId2}],
         properties: ["hs_lead_name"],
         propertiesWithHistory: []
     };
@@ -78,7 +78,7 @@ function batchReadLeads(string leadId1, string leadId2) returns leads:BatchRespo
 
 function batchArchiveLeads(string leadId1, string leadId2) returns http:Response|error {
     leads:BatchInputSimplePublicObjectId payload = {
-        inputs: [{ id: leadId1 }, { id: leadId2 }]
+        inputs: [{id: leadId1}, {id: leadId2}]
     };
     return leadClient->/batch/archive.post(payload);
 }
@@ -103,30 +103,29 @@ public function main() returns error? {
     leads:BatchResponseSimplePublicObject batchCreatedLeads = check batchCreateLeads(leadNames, contactIds);
     io:println("Batch leads created: ", batchCreatedLeads.results);
 
-
     // Batch update leads with proper parameters
     string[] leadNamesToUpdate = ["Yoga Class Interest", "Body Building Interest"];
     leads:BatchResponseSimplePublicObject batchUpdatedLeads = check batchUpdateLeads(
-        [batchCreatedLeads.results[0].id, batchCreatedLeads.results[1].id],
-        leadNamesToUpdate
+            [batchCreatedLeads.results[0].id, batchCreatedLeads.results[1].id],
+            leadNamesToUpdate
     );
     io:println("Batch leads updated: ", batchUpdatedLeads.results.length());
 
     // Batch read leads
     leads:BatchResponseSimplePublicObject batchReadLeadsResponse = check batchReadLeads(
-        batchCreatedLeads.results[0].id,
-        batchCreatedLeads.results[1].id
+            batchCreatedLeads.results[0].id,
+            batchCreatedLeads.results[1].id
     );
     io:println("Batch leads read: ", batchReadLeadsResponse.results);
-    
+
     // Search leads
     leads:CollectionResponseWithTotalSimplePublicObjectForwardPaging searchedLeads = check searchLeads("Body");
     io:println("Leads found: ", searchedLeads.total);
 
     // Batch archive leads
     http:Response batchArchivedLeads = check batchArchiveLeads(
-        batchCreatedLeads.results[0].id,
-        batchCreatedLeads.results[1].id
+            batchCreatedLeads.results[0].id,
+            batchCreatedLeads.results[1].id
     );
     io:println("Batch leads archived successfully: ", batchArchivedLeads.statusCode);
 

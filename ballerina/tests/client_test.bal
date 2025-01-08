@@ -1,6 +1,6 @@
+import ballerina/http;
 import ballerina/oauth2;
 import ballerina/test;
-import ballerina/http;
 
 configurable string clientId = ?;
 configurable string clientSecret = ?;
@@ -90,51 +90,52 @@ function testDeleteLead() returns error? {
 }
 
 string[] testBatchCreateIds = [];
+
 @test:Config {}
 function testBatchCreateLeads() returns error? {
     BatchInputSimplePublicObjectInputForCreate payload = {
         inputs: [
             {
-        "associations": [
-            {
-                "types": [
+                "associations": [
                     {
-                        "associationCategory": "HUBSPOT_DEFINED",
-                        "associationTypeId": 578
+                        "types": [
+                            {
+                                "associationCategory": "HUBSPOT_DEFINED",
+                                "associationTypeId": 578
+                            }
+                        ],
+                        "to": {
+                            "id": "85187963930"
+                        }
                     }
                 ],
-                "to": {
-                    "id": "85187963930"
+                "properties": {
+                    "hs_lead_name": "John Doe"
                 }
-            }
-        ],
-        "properties": {
-            "hs_lead_name": "John Doe"
-        }
-    },
-    {
-        "associations": [
+            },
             {
-                "types": [
+                "associations": [
                     {
-                        "associationCategory": "HUBSPOT_DEFINED",
-                        "associationTypeId": 578
+                        "types": [
+                            {
+                                "associationCategory": "HUBSPOT_DEFINED",
+                                "associationTypeId": 578
+                            }
+                        ],
+                        "to": {
+                            "id": "85191276972"
+                        }
                     }
                 ],
-                "to": {
-                    "id": "85191276972"
+                "properties": {
+                    "hs_lead_name": "John ohn"
                 }
             }
-        ],
-        "properties": {
-            "hs_lead_name": "John ohn"
-        }
-    }
         ]
     };
     BatchResponseSimplePublicObject response = check _client->/batch/create.post(payload);
     foreach var item in response.results {
-        testBatchCreateIds.push(item.id);     
+        testBatchCreateIds.push(item.id);
     }
     test:assertEquals(response.results.length(), 2, msg = "Batch lead creation failed.");
 }
@@ -142,7 +143,7 @@ function testBatchCreateLeads() returns error? {
 @test:Config {dependsOn: [testBatchCreateLeads]}
 function testBatchReadLeads() returns error? {
     BatchReadInputSimplePublicObjectId payload = {
-        inputs: [{ id: testBatchCreateIds[0]}, { id: testBatchCreateIds[1] }],
+        inputs: [{id: testBatchCreateIds[0]}, {id: testBatchCreateIds[1]}],
         properties: ["hs_lead_name"],
         propertiesWithHistory: []
     };
@@ -154,14 +155,14 @@ function testBatchReadLeads() returns error? {
 function testBatchUpdateLeads() returns error? {
     BatchInputSimplePublicObjectBatchInput payload = {
         inputs: [
-            { id: testBatchCreateIds[0], properties: { "hs_lead_name": "John Updated" } },
-            { id: testBatchCreateIds[1], properties: { "hs_lead_name": "Ohn Updated" } }
+            {id: testBatchCreateIds[0], properties: {"hs_lead_name": "John Updated"}},
+            {id: testBatchCreateIds[1], properties: {"hs_lead_name": "Ohn Updated"}}
         ]
     };
     BatchResponseSimplePublicObject response = check _client->/batch/update.post(payload);
     test:assertEquals(response.results.length(), 2, msg = "Batch lead update failed.");
-    map<string> idToNameMap = { 
-        [testBatchCreateIds[0]]: payload.inputs[0].properties["hs_lead_name"].toString(), 
+    map<string> idToNameMap = {
+        [testBatchCreateIds[0]]: payload.inputs[0].properties["hs_lead_name"].toString(),
         [testBatchCreateIds[1]]: payload.inputs[1].properties["hs_lead_name"].toString()
     };
 
@@ -195,7 +196,7 @@ function testSearchLeads() returns error? {
 @test:Config {dependsOn: [testSearchLeads]}
 function testBatchArchiveLeads() returns error? {
     BatchInputSimplePublicObjectId payload = {
-        inputs: [{ id:  testBatchCreateIds[0] }, { id: testBatchCreateIds[1] }]
+        inputs: [{id: testBatchCreateIds[0]}, {id: testBatchCreateIds[1]}]
     };
 
     http:Response result = check _client->/batch/archive.post(payload);

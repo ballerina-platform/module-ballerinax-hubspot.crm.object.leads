@@ -1,7 +1,7 @@
+import ballerina/http;
 import ballerina/io;
 import ballerina/oauth2;
 import ballerinax/hubspot.crm.obj.leads as leads;
-import ballerina/http;
 
 // Configuration variables
 configurable string clientId = ?;
@@ -69,7 +69,7 @@ function getAllLeads(boolean archived = false) returns leads:CollectionResponseS
     return leadClient->/.get(archived = archived);
 }
 
-function deleteLead(string leadId) returns http:Response | error {
+function deleteLead(string leadId) returns http:Response|error {
     return leadClient->/[leadId].delete();
 }
 
@@ -95,6 +95,6 @@ public function main() returns error? {
     // Delete the created lead
     http:Response deleteResponse = check deleteLead(createdLead.id);
     io:println("Lead deleted successfully: ", deleteResponse.statusCode);
-    
+
     return ();
 }

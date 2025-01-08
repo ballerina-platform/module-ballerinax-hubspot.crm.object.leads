@@ -1,4 +1,5 @@
 import ballerina/test;
+
 //import ballerina/io;
 
 @test:Config {}
@@ -7,7 +8,7 @@ function testGetDeepObjectStyleRequest() {
         "key1": "value1",
         "key2": 123,
         "key3": true,
-        "key4": { "subKey1": "subValue1" }
+        "key4": {"subKey1": "subValue1"}
     };
     string result = getDeepObjectStyleRequest("parent", inputRecord);
     string expected = "parent[key1]=value1&parent[key2]=123&parent[key3]=true&parent[key4][subKey1]=subValue1";
@@ -17,12 +18,12 @@ function testGetDeepObjectStyleRequest() {
 @test:Config {}
 function testGetDeepObjectStyleRequestWithNestedRecords() {
     record {} inputRecord = {
-        "key1": { 
-            "subKey1": "subValue1", 
-            "subKey2": { "subSubKey1": "subSubValue1" }
+        "key1": {
+            "subKey1": "subValue1",
+            "subKey2": {"subSubKey1": "subSubValue1"}
         },
-        "key2": { 
-            "subKey3": "subValue3" 
+        "key2": {
+            "subKey3": "subValue3"
         }
     };
     string result = getDeepObjectStyleRequest("parent", inputRecord);
@@ -53,8 +54,8 @@ function testGetSerializedArray() {
 @test:Config {}
 function testGetSerializedRecordArray() {
     record {}[] inputRecordArray = [
-        { "key1": "value1", "key2": 123 },
-        { "key3": true, "key4": "value4" }
+        {"key1": "value1", "key2": 123},
+        {"key3": true, "key4": "value4"}
     ];
     string result = getSerializedRecordArray("parent", inputRecordArray);
     string expected = "key1=value1&key2=123,key3=true&key4=value4";
@@ -105,8 +106,8 @@ function testGetPathForQueryParamWithEncoding() returns error? {
         "key3": true
     };
     map<Encoding> encodingMap = {
-        "key1": { style: DEEPOBJECT, explode: true },
-        "key2": { style: FORM, explode: false }
+        "key1": {style: DEEPOBJECT, explode: true},
+        "key2": {style: FORM, explode: false}
     };
     string result = check getPathForQueryParam(queryParam, encodingMap);
     string expected = "?key1=value1&key2=123&key3=true";
@@ -152,8 +153,8 @@ function testGetFormStyleRequestWithoutExplode() {
 @test:Config {}
 function testGetSerializedRecordArrayWithoutExplode() {
     record {}[] inputRecordArray = [
-        { "key1": "value1", "key2": 123 },
-        { "key3": true, "key4": "value4" }
+        {"key1": "value1", "key2": 123},
+        {"key3": true, "key4": "value4"}
     ];
     string result = getSerializedRecordArray("parent", inputRecordArray, "form", false);
     string expected = "parent=key1,value1,key2,123,key3,true,key4,value4";
