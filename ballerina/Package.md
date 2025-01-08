@@ -64,7 +64,7 @@ Within app developer accounts, you can create developer test accounts to test ap
 
 - Navigate to the Auth section of your app. Make sure to save the provided Client ID and Client Secret.
 
-   <img src="https://github.com/anush47/module-ballerinax-hubspot.crm.object.leads/tree/main/docs/setup/resources/get_credentials.png" alt="Hubspot app auth setup 5" style="width: 70%;">
+   <img src="https://github.com/anush47/https://github.com/anush47/module-ballerinax-hubspot.crm.object.leads/blob/04884b07f38302371b047a1ed165aa2e822623d7/docs/setup/resources/get_credentials.png" alt="Hubspot app auth setup 5" style="width: 70%;">
 
 ### Step 6: Setup Authentication Flow
 
