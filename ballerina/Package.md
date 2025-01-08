@@ -1,9 +1,8 @@
 ## Overview
 
-"[HubSpot](https://www.hubspot.com/our-story) is an AI-powered customer relationship management (CRM) platform. 
+"[HubSpot](https://www.hubspot.com/our-story) is an AI-powered customer relationship management (CRM) platform.
 
 The ballerinax/hubspot.crm.obj.leads offers APIs to connect and interact with the [HubSpot API for CRM Leads](https://developers.hubspot.com/docs/reference/api/crm/objects/leads) endpoints, specifically based on the [HubSpot CRM Leads API v3 OpenAPI spec](https://github.com/HubSpot/HubSpot-public-api-spec-collection/blob/main/PublicApiSpecs/CRM/Leads/Rollouts/424/v3/leads.json)"
-
 
 ## Setup guide
 
@@ -15,64 +14,59 @@ If you have an account already, go to the [HubSpot developer portal](https://app
 
 If you don't have a HubSpot Developer Account you can sign up to a free account [here](https://developers.hubspot.com/get-started)
 
-### Step 2 (Optional): Create a Developer Test Account
+### Step 2 (Optional): Create a [Developer Test Account](https://developers.hubspot.com/beta-docs/getting-started/account-types#developer-test-accounts) under your account
 
 Within app developer accounts, you can create developer test accounts to test apps and integrations without affecting any real HubSpot data.
 
-**_These accounts are only for development and testing purposes. In production, you should not use Developer Test Accounts._**
+**_These accounts are only for development and testing purposes. In production you should not use Developer Test Accounts._**
 
-1. Go to the Test Account section from the left sidebar.
+1. Go to Test Account section from the left sidebar.
 
-   ![Test Account Section](docs/setup/resources/test_acc_1.png)
+   ![Hubspot developer portal](https://github.com/anush47/module-ballerinax-hubspot.crm.object.leads/blob/04884b07f38302371b047a1ed165aa2e822623d7/docs/setup/resources/test_acc_1.png)
 
-2. Click "Create Developer Test Account."
+2. Click Create developer test account.
 
-   ![Create Developer Test Account](docs/setup/resources/test_acc_2.png)
+   ![Hubspot developer testacc](https://github.com/anush47/module-ballerinax-hubspot.crm.object.leads/blob/04884b07f38302371b047a1ed165aa2e822623d7/docs/setup/resources/test_acc_2.png)
 
-3. In the dialogue box, give a name to your test account and click "Create."
+3. In the dialogue box, give a name to your test account and click create.
 
-   ![Test Account Creation](docs/setup/resources/test_acc_3.png)
+   ![Hubspot developer testacc_creation_3](https://github.com/anush47/module-ballerinax-hubspot.crm.object.leads/blob/04884b07f38302371b047a1ed165aa2e822623d7/docs/setup/resources/test_acc_3.png)
 
----
+### Step 3: Create a HubSpot App under your account.
 
-### Step 3: Create a HubSpot App
+1. In your developer account, navigate to the "Apps" section. Click on "Create App"
 
-1. In your developer account, navigate to the "Apps" section and click on "Create App."
-
-   ![Create HubSpot App](docs/setup/resources/create_app_1.png)
+   ![Hubspot app creation 1](https://github.com/anush47/module-ballerinax-hubspot.crm.object.leads/blob/04884b07f38302371b047a1ed165aa2e822623d7/docs/setup/resources/create_app_1.png)
 
 2. Provide the necessary details, including the app name and description.
 
----
+### Step 4: Configure the Authentication Flow.
 
-### Step 4: Configure the Authentication Flow
+1. Move to the Auth Tab.
 
-1. Navigate to the "Auth" Tab.
+   ![Hubspot app auth setup 1](https://github.com/anush47/module-ballerinax-hubspot.crm.object.leads/blob/04884b07f38302371b047a1ed165aa2e822623d7/docs/setup/resources/create_app_2.png)
 
-   ![Auth Tab](docs/setup/resources/create_app_2.png)
+2. In the Scopes section, add the following scopes for your app using the "Add new scope" button.
 
-2. In the Scopes section, add the following scopes for your app using the "Add new scope" button:
+   `crm.objects.leads.read`
 
-   - `crm.objects.leads.read`
-   - `crm.objects.leads.write`
+   `crm.objects.leads.write`
 
-   ![Add Scopes](docs/setup/resources/scope_set.png)
+   ![Hubspot app auth setup 2](https://github.com/anush47/module-ballerinax-hubspot.crm.object.leads/blob/04884b07f38302371b047a1ed165aa2e822623d7/docs/setup/resources/scope_set.png)
 
-3. Add your Redirect URI in the relevant section. You can also use localhost addresses for local development purposes. Click "Create App."
+4. Add your Redirect URI in the relevant section. You can also use localhost addresses for local development purposes. Click Create App.
 
-   ![Finalizing App Creation](docs/setup/resources/create_app_final.png)
-
----
+   ![Hubspot app auth setup 3](https://github.com/anush47/module-ballerinax-hubspot.crm.object.leads/blob/04884b07f38302371b047a1ed165aa2e822623d7/docs/setup/resources/create_app_final.png)
 
 ### Step 5: Get your Client ID and Client Secret
 
-- Navigate to the "Auth" section of your app and save the provided Client ID and Client Secret.
+- Navigate to the Auth section of your app. Make sure to save the provided Client ID and Client Secret.
 
-   ![Get Credentials](docs/setup/resources/get_credentials.png)
+   ![Hubspot app auth setup 5](https://github.com/anush47/module-ballerinax-hubspot.crm.object.leads/blob/04884b07f38302371b047a1ed165aa2e822623d7/docs/setup/resources/get_credentials.png)
 
----
+### Step 6: Setup Authentication Flow
 
-### Step 6: Set up Authentication Flow
+Before proceeding with the Quickstart, ensure you have obtained the Access Token using the following steps:
 
 1. Create an authorization URL using the following format:
 
@@ -80,19 +74,52 @@ Within app developer accounts, you can create developer test accounts to test ap
    https://app.hubspot.com/oauth/authorize?client_id=<YOUR_CLIENT_ID>&scope=<YOUR_SCOPES>&redirect_uri=<YOUR_REDIRECT_URI>
    ```
 
-   Alternatively, the link can be obtained from HubSpot.
+    Alternatively the link can be obtained from Hubspot.
 
-   ![Get Auth Code](docs/setup/resources/get_auth_code.png)
+    ![Hubspot get auth code](https://github.com/anush47/module-ballerinax-hubspot.crm.object.leads/blob/04884b07f38302371b047a1ed165aa2e822623d7/docs/setup/resources/get_auth_code.png)
 
-2. Paste it in the browser and select your developer test account to install the app when prompted.
+2. Paste it in the browser and select your developer test account to intall the app when prompted.
 
-   ![Install App](docs/setup/resources/install_app.png)
+   ![Hubspot app install](https://github.com/anush47/module-ballerinax-hubspot.crm.object.leads/blob/04884b07f38302371b047a1ed165aa2e822623d7/docs/setup/resources/install_app.png)
 
 3. A code will be displayed in the browser. Copy the code.
 
    ```
    Received code: na1-129d-860c-xxxx-xxxx-xxxxxxxxxxxx
    ```
+
+4. Run the following curl command. Replace the `<YOUR_CLIENT_ID>`, `<YOUR_REDIRECT_URI>` and `<YOUR_CLIENT_SECRET>` with your specific value. Use the code you received in the above step 3 as the `<CODE>`.
+
+   - Linux/macOS
+
+     ```bash
+     curl --request POST \
+     --url https://api.hubapi.com/oauth/v1/token \
+     --header 'content-type: application/x-www-form-urlencoded' \
+     --data 'grant_type=authorization_code&code=<CODE>&redirect_uri=<YOUR_REDIRECT_URI>&client_id=<YOUR_CLIENT_ID>&client_secret=<YOUR_CLIENT_SECRET>'
+     ```
+
+   - Windows
+
+     ```bash
+     curl --request POST ^
+     --url https://api.hubapi.com/oauth/v1/token ^
+     --header 'content-type: application/x-www-form-urlencoded' ^
+     --data 'grant_type=authorization_code&code=<CODE>&redirect_uri=<YOUR_REDIRECT_URI>&client_id=<YOUR_CLIENT_ID>&client_secret=<YOUR_CLIENT_SECRET>'
+     ```
+
+   This command will return the access token necessary for API calls.
+
+   ```json
+   {
+     "token_type": "bearer",
+     "refresh_token": "<Refresh Token>",
+     "access_token": "<Access Token>",
+     "expires_in": 1800
+   }
+   ```
+
+5. Store the access token securely for use in your application.
 
 ## Quickstart
 
