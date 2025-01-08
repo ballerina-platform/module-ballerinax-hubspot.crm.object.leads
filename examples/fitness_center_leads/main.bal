@@ -1,3 +1,19 @@
+// Copyright (c) 2025, WSO2 LLC. (http://www.wso2.com).
+//
+// WSO2 LLC. licenses this file to you under the Apache License,
+// Version 2.0 (the "License"); you may not use this file except
+// in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
+
 import ballerina/http;
 import ballerina/io;
 import ballerina/oauth2;
@@ -8,27 +24,44 @@ configurable string clientId = ?;
 configurable string clientSecret = ?;
 configurable string refreshToken = ?;
 
-// Type definitions
-type LeadProperties record {
-    string hs_lead_name;
-};
-
 // Client initialization
-final leads:Client leadClient = check initializeLeadClient();
-
-function initializeLeadClient() returns leads:Client|error {
-    leads:OAuth2RefreshTokenGrantConfig auth = {
+final leads:Client leadClient = check new leads:Client({
+    auth: {
         clientId: clientId,
         clientSecret: clientSecret,
         refreshToken: refreshToken,
         credentialBearer: oauth2:POST_BODY_BEARER
-    };
-    leads:ConnectionConfig config = {auth: auth};
-    return new leads:Client(config);
-}
+    }
+});
 
-function getAllLeads(boolean archived = false) returns leads:CollectionResponseSimplePublicObjectWithAssociationsForwardPaging|error {
-    return leadClient->/.get(archived = archived);
+public function main() returns error? {
+    string[] contactIds = ["85187963930", "85191276972"];
+    string[] leadNames = ["Yoga Class Interest", "Personal Training Interest"];
+
+    // Batch create leads
+    leads:BatchResponseSimplePublicObject batchCreatedLeads = check batchCreateLeads(leadNames, contactIds);
+    io:println("Batch leads created: ", batchCreatedLeads.results);
+
+    // Batch update leads
+    string[] leadNamesToUpdate = ["Yoga Class Interest", "Body Building Interest"];
+    leads:BatchResponseSimplePublicObject batchUpdatedLeads = check batchUpdateLeads(
+            [batchCreatedLeads.results[0].id, batchCreatedLeads.results[1].id],
+            leadNamesToUpdate
+    );
+    io:println("Batch leads updated: ", batchUpdatedLeads.results);
+
+    // Search leads
+    leads:CollectionResponseWithTotalSimplePublicObjectForwardPaging searchedLeads = check searchLeads("Body");
+    io:println("Leads found: ", searchedLeads.total);
+
+    // Batch archive leads
+    http:Response batchArchivedLeads = check batchArchiveLeads(
+            batchCreatedLeads.results[0].id,
+            batchCreatedLeads.results[1].id
+    );
+    io:println("Batch leads archived successfully: ", batchArchivedLeads.statusCode);
+
+    return ();
 }
 
 function batchCreateLeads(string[] leadNames, string[] contactIds) returns leads:BatchResponseSimplePublicObject|error {
@@ -67,15 +100,6 @@ function batchUpdateLeads(string[] leadIds, string[] leadNames) returns leads:Ba
     return leadClient->/batch/update.post(payload);
 }
 
-function batchReadLeads(string leadId1, string leadId2) returns leads:BatchResponseSimplePublicObject|error {
-    leads:BatchReadInputSimplePublicObjectId payload = {
-        inputs: [{id: leadId1}, {id: leadId2}],
-        properties: ["hs_lead_name"],
-        propertiesWithHistory: []
-    };
-    return leadClient->/batch/read.post(payload);
-}
-
 function batchArchiveLeads(string leadId1, string leadId2) returns http:Response|error {
     leads:BatchInputSimplePublicObjectId payload = {
         inputs: [{id: leadId1}, {id: leadId2}]
@@ -89,45 +113,4 @@ function searchLeads(string query) returns leads:CollectionResponseWithTotalSimp
         properties: ["hs_lead_name"]
     };
     return leadClient->/search.post(payload);
-}
-
-public function main() returns error? {
-    string[] contactIds = ["85187963930", "85191276972"];
-
-    // Get all leads
-    leads:CollectionResponseSimplePublicObjectWithAssociationsForwardPaging allLeads = check getAllLeads();
-    io:println("Total leads: ", allLeads.results.length());
-
-    // Batch create leads with proper parameters
-    string[] leadNames = ["Yoga Class Interest", "Personal Training Interest"];
-    leads:BatchResponseSimplePublicObject batchCreatedLeads = check batchCreateLeads(leadNames, contactIds);
-    io:println("Batch leads created: ", batchCreatedLeads.results);
-
-    // Batch update leads with proper parameters
-    string[] leadNamesToUpdate = ["Yoga Class Interest", "Body Building Interest"];
-    leads:BatchResponseSimplePublicObject batchUpdatedLeads = check batchUpdateLeads(
-            [batchCreatedLeads.results[0].id, batchCreatedLeads.results[1].id],
-            leadNamesToUpdate
-    );
-    io:println("Batch leads updated: ", batchUpdatedLeads.results.length());
-
-    // Batch read leads
-    leads:BatchResponseSimplePublicObject batchReadLeadsResponse = check batchReadLeads(
-            batchCreatedLeads.results[0].id,
-            batchCreatedLeads.results[1].id
-    );
-    io:println("Batch leads read: ", batchReadLeadsResponse.results);
-
-    // Search leads
-    leads:CollectionResponseWithTotalSimplePublicObjectForwardPaging searchedLeads = check searchLeads("Body");
-    io:println("Leads found: ", searchedLeads.total);
-
-    // Batch archive leads
-    http:Response batchArchivedLeads = check batchArchiveLeads(
-            batchCreatedLeads.results[0].id,
-            batchCreatedLeads.results[1].id
-    );
-    io:println("Batch leads archived successfully: ", batchArchivedLeads.statusCode);
-
-    return ();
 }

@@ -1,9 +1,25 @@
+// Copyright (c) 2025, WSO2 LLC. (http://www.wso2.com).
+//
+// WSO2 LLC. licenses this file to you under the Apache License,
+// Version 2.0 (the "License"); you may not use this file except
+// in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
+
 import ballerina/http;
 import ballerina/random;
 
 service /mock on new http:Listener(9090) {
 
-    resource function get crm/v3/objects/leads(http:Caller caller, http:Request req) returns error? {
+    resource function get crm/v3/objects/leads(http:Request req) returns CollectionResponseSimplePublicObjectWithAssociationsForwardPaging {
         CollectionResponseSimplePublicObjectWithAssociationsForwardPaging response = {
             results: [
                 {
@@ -21,20 +37,20 @@ service /mock on new http:Listener(9090) {
             ],
             paging: {next: {after: "2"}}
         };
-        check caller->respond(response);
+        return response;
     }
 
-    resource function get crm/v3/objects/leads/[string leadsId](http:Caller caller, http:Request req) returns error? {
+    resource function get crm/v3/objects/leads/[string leadsId](http:Request req) returns SimplePublicObjectWithAssociations {
         SimplePublicObjectWithAssociations response = {
             id: leadsId,
             properties: {"hs_lead_name": "Lead One", "email": "leadone@example.com"},
             updatedAt: "2023-10-01T00:00:00Z",
             createdAt: "2023-09-01T00:00:00Z"
         };
-        check caller->respond(response);
+        return response;
     }
 
-    resource function post crm/v3/objects/leads(http:Caller caller, http:Request req, @http:Payload SimplePublicObjectInputForCreate payload) returns error? {
+    resource function post crm/v3/objects/leads(http:Request req, @http:Payload SimplePublicObjectInputForCreate payload) returns SimplePublicObject {
         SimplePublicObject response = {
             id: random:createDecimal().toString(),
             "associations": payload.associations,
@@ -42,28 +58,32 @@ service /mock on new http:Listener(9090) {
             createdAt: "2023-09-01T00:00:00Z",
             updatedAt: "2023-09-01T00:00:00Z"
         };
-        check caller->respond(response);
+        return response;
     }
 
-    resource function patch crm/v3/objects/leads/[string leadsId](http:Caller caller, http:Request req, @http:Payload SimplePublicObjectInput payload) returns error? {
+    resource function patch crm/v3/objects/leads/[string leadsId](http:Request req, @http:Payload SimplePublicObjectInput payload) returns SimplePublicObject {
         SimplePublicObject response = {
             id: leadsId,
             properties: payload.properties,
             createdAt: "2023-09-01T00:00:00Z",
             updatedAt: "2023-09-01T00:00:00Z"
         };
-        check caller->respond(response);
+        return response;
     }
 
-    resource function delete crm/v3/objects/leads/[string leadsId](http:Caller caller, http:Request req) returns error? {
-        check caller->respond(http:STATUS_NO_CONTENT);
+    resource function delete crm/v3/objects/leads/[string leadsId](http:Request req) returns http:Response {
+        http:Response response = new;
+        response.statusCode = 204;
+        return response;
     }
 
-    resource function post crm/v3/objects/leads/batch/archive(http:Caller caller, http:Request req, @http:Payload BatchInputSimplePublicObjectId payload) returns error? {
-        check caller->respond(http:STATUS_NO_CONTENT);
+    resource function post crm/v3/objects/leads/batch/archive(http:Request req, @http:Payload BatchInputSimplePublicObjectId payload) returns http:Response {
+        http:Response response = new;
+        response.statusCode = 204;
+        return response;
     }
 
-    resource function post crm/v3/objects/leads/batch/create(http:Caller caller, http:Request req, @http:Payload BatchInputSimplePublicObjectInputForCreate payload) returns error? {
+    resource function post crm/v3/objects/leads/batch/create(http:Request req, @http:Payload BatchInputSimplePublicObjectInputForCreate payload) returns BatchResponseSimplePublicObject {
         BatchResponseSimplePublicObject response = {
             results: payload.inputs.map(function(SimplePublicObjectInputForCreate input) returns SimplePublicObject {
                 return {
@@ -77,10 +97,10 @@ service /mock on new http:Listener(9090) {
             completedAt: "2023-10-01T00:00:00Z",
             startedAt: "2023-10-01T00:00:00Z"
         };
-        check caller->respond(response);
+        return response;
     }
 
-    resource function post crm/v3/objects/leads/batch/read(http:Caller caller, http:Request req, @http:Payload BatchReadInputSimplePublicObjectId payload) returns error? {
+    resource function post crm/v3/objects/leads/batch/read(http:Request req, @http:Payload BatchReadInputSimplePublicObjectId payload) returns BatchResponseSimplePublicObject {
         BatchResponseSimplePublicObject response = {
             results: payload.inputs.map(function(SimplePublicObjectId input) returns SimplePublicObject {
                 return {
@@ -94,10 +114,10 @@ service /mock on new http:Listener(9090) {
             completedAt: "2023-10-01T00:00:00Z",
             startedAt: "2023-10-01T00:00:00Z"
         };
-        check caller->respond(response);
+        return response;
     }
 
-    resource function post crm/v3/objects/leads/batch/update(http:Caller caller, http:Request req, @http:Payload BatchInputSimplePublicObjectBatchInput payload) returns error? {
+    resource function post crm/v3/objects/leads/batch/update(http:Request req, @http:Payload BatchInputSimplePublicObjectBatchInput payload) returns BatchResponseSimplePublicObject {
         BatchResponseSimplePublicObject response = {
             results: payload.inputs.map(function(SimplePublicObjectBatchInput input) returns SimplePublicObject {
                 return {
@@ -111,10 +131,10 @@ service /mock on new http:Listener(9090) {
             completedAt: "2023-10-01T00:00:00Z",
             startedAt: "2023-10-01T00:00:00Z"
         };
-        check caller->respond(response);
+        return response;
     }
 
-    resource function post crm/v3/objects/leads/search(http:Caller caller, http:Request req, @http:Payload PublicObjectSearchRequest payload) returns error? {
+    resource function post crm/v3/objects/leads/search(http:Request req, @http:Payload PublicObjectSearchRequest payload) returns CollectionResponseWithTotalSimplePublicObjectForwardPaging {
         CollectionResponseWithTotalSimplePublicObjectForwardPaging response = {
             results: [
                 {
@@ -133,6 +153,6 @@ service /mock on new http:Listener(9090) {
             total: 2,
             paging: {next: null}
         };
-        check caller->respond(response);
+        return response;
     }
 }
