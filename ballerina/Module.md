@@ -205,5 +205,5 @@ public function main() returns error? {
 
 The `Ballerina HubSpot CRM Leads Connector` connector provides practical examples illustrating usage in various scenarios. Explore these [examples](https://github.com/module-ballerinax-hubspot.crm.object.leads/tree/main/examples/real_estate_inquiry_leads/main.bal/), covering the following use cases:
 
-- [Real Estate Inquiry Leads](https://github.com/anush47/module-ballerinax-hubspot.crm.object.leads/blob/main/examples/real_estate_inquiry_leads/main.bal)
-- [Fitness Center Leads](https://github.com/anush47/module-ballerinax-hubspot.crm.object.leads/blob/main/examples/fitness_center_leads/main.bal)
+- [Real Estate Inquiry Leads](examples/real_estate_inquiry_leads)
+- [Fitness Center Leads](examples/fitness_center_leads)

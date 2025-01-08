@@ -134,7 +134,7 @@ function testBatchCreateLeads() returns error? {
         ]
     };
     BatchResponseSimplePublicObject response = check _client->/batch/create.post(payload);
-    foreach var item in response.results {
+    foreach SimplePublicObject item in response.results {
         testBatchCreateIds.push(item.id);
     }
     test:assertEquals(response.results.length(), 2, msg = "Batch lead creation failed.");
@@ -166,7 +166,7 @@ function testBatchUpdateLeads() returns error? {
         [testBatchCreateIds[1]]: payload.inputs[1].properties["hs_lead_name"].toString()
     };
 
-    foreach var result in response.results {
+    foreach SimplePublicObject result in response.results {
         test:assertEquals(result.properties["hs_lead_name"], idToNameMap[result.id], msg = "Invalid lead name.");
     }
 }
