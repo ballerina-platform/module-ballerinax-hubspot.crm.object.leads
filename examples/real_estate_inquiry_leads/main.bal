@@ -24,11 +24,6 @@ configurable string clientId = ?;
 configurable string clientSecret = ?;
 configurable string refreshToken = ?;
 
-// Type definitions
-type LeadProperties record {
-    string hs_lead_name;
-};
-
 // Client initialization
 final leads:Client leadClient = check initializeLeadClient();
 

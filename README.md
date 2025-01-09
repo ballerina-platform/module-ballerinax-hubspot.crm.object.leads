@@ -212,7 +212,7 @@ bal run
 
 ## Examples
 
-The `Ballerina HubSpot CRM Leads Connector` connector provides practical examples illustrating usage in various scenarios. Explore these [examples](https://github.com/module-ballerinax-hubspot.crm.object.leads/tree/main/examples/real_estate_inquiry_leads/main.bal/), covering the following use cases:
+The `Ballerina HubSpot CRM Leads Connector` connector provides practical examples illustrating usage in various scenarios. Explore these [examples](https://github.com/ballerina-platform/module-ballerinax-hubspot.crm.object.leads/tree/38bfdb49b5b8d209729700d8e52961f6a08d632f/examples), covering the following use cases:
 
 - [Real Estate Inquiry Leads](examples/real_estate_inquiry_leads)
 - [Fitness Center Leads](examples/fitness_center_leads)
