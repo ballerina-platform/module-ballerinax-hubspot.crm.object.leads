@@ -25,7 +25,7 @@ configurable string clientSecret = ?;
 configurable string refreshToken = ?;
 
 // Client initialization
-final leads:Client leadClient = check new leads:Client({
+final leads:Client hsLeads = check new ({
     auth: {
         clientId: clientId,
         clientSecret: clientSecret,
@@ -60,8 +60,6 @@ public function main() returns error? {
             batchCreatedLeads.results[1].id
     );
     io:println("Batch leads archived successfully: ", batchArchivedLeads.statusCode);
-
-    return ();
 }
 
 function batchCreateLeads(string[] leadNames, string[] contactIds) returns leads:BatchResponseSimplePublicObject|error {
@@ -86,7 +84,7 @@ function batchCreateLeads(string[] leadNames, string[] contactIds) returns leads
                 }
             }
     };
-    return leadClient->/batch/create.post(payload);
+    return hsLeads->/batch/create.post(payload);
 }
 
 function batchUpdateLeads(string[] leadIds, string[] leadNames) returns leads:BatchResponseSimplePublicObject|error {
@@ -97,14 +95,14 @@ function batchUpdateLeads(string[] leadIds, string[] leadNames) returns leads:Ba
                 properties: {"hs_lead_name": leadNames[i]}
             }
     };
-    return leadClient->/batch/update.post(payload);
+    return hsLeads->/batch/update.post(payload);
 }
 
 function batchArchiveLeads(string leadId1, string leadId2) returns http:Response|error {
     leads:BatchInputSimplePublicObjectId payload = {
         inputs: [{id: leadId1}, {id: leadId2}]
     };
-    return leadClient->/batch/archive.post(payload);
+    return hsLeads->/batch/archive.post(payload);
 }
 
 function searchLeads(string query) returns leads:CollectionResponseWithTotalSimplePublicObjectForwardPaging|error {
@@ -112,5 +110,5 @@ function searchLeads(string query) returns leads:CollectionResponseWithTotalSimp
         query: query,
         properties: ["hs_lead_name"]
     };
-    return leadClient->/search.post(payload);
+    return hsLeads->/search.post(payload);
 }

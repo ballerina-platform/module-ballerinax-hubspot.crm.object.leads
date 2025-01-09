@@ -1,9 +1,9 @@
 # Examples
 
-The `ballerinax/hubspot.crm.object.leads` connector provides practical examples illustrating usage in various scenarios.
+The `ballerinax/hubspot.crm.object.leads` connector provides practical examples illustrating usage in various scenarios. Explore these examples, covering the following use cases:
 
-- [Real Estate Inquiry Leads](https://github.com/anush47/module-ballerinax-hubspot.crm.object.leads/blob/main/examples/real_estate_inquiry_leads)
-- [Fitness Center Leads](https://github.com/anush47/module-ballerinax-hubspot.crm.object.leads/blob/main/examples/fitness_center_leads)
+- [**Real Estate Inquiry Leads**](https://github.com/anush47/module-ballerinax-hubspot.crm.object.leads/blob/main/examples/real_estate_inquiry_leads): Learn how the HubSpot API can be used to manage and process leads from real estate inquiries.
+- [**Fitness Center Leads**](https://github.com/anush47/module-ballerinax-hubspot.crm.object.leads/blob/main/examples/fitness_center_leads): Discover how the HubSpot API can be utilized to handle leads for fitness center memberships and services.
 
 ## Prerequisites
 

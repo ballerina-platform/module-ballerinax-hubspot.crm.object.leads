@@ -8,13 +8,9 @@
 
 ## Overview
 
-"[HubSpot](https://www.hubspot.com/our-story) is an AI-powered customer relationship management (CRM) platform.
+[HubSpot](https://www.hubspot.com) is an AI-powered customer relationship management (CRM) platform.
 
-The ballerinax/hubspot.crm.obj.leads offers APIs to connect and interact with the [HubSpot API for CRM Leads](https://developers.hubspot.com/docs/reference/api/crm/objects/leads) endpoints, specifically based on the [HubSpot CRM Leads API v3 OpenAPI spec](https://github.com/HubSpot/HubSpot-public-api-spec-collection/blob/main/PublicApiSpecs/CRM/Leads/Rollouts/424/v3/leads.json)"
-
->**_NOTE:_**             
-This package may be changed in the future based on the HubSpot API changes, since it is currently under development and is subject to change based on testing and feedback. By using this package, you are agreeing to accept any future changes that might occur and understand the risk associated with testing an unstable API.
-Refer to the [HubSpot Developer Terms](https://legal.hubspot.com/developer-terms?_gl=1*fmuxuh*_ga*NDU4NDIxOTA5LjE3MzQ3ODM3Mjg.*_ga_LXTM6CQ0XK*MTczNDgwNjI1OS4yLjAuMTczNDgwNjI1OS42MC4wLjA.&_ga=2.66923502.174841559.1734639641-983296813.1734639641) & [Developer Beta Terms](https://legal.hubspot.com/developerbetaterms?_gl=1*fmuxuh*_ga*NDU4NDIxOTA5LjE3MzQ3ODM3Mjg.*_ga_LXTM6CQ0XK*MTczNDgwNjI1OS4yLjAuMTczNDgwNjI1OS42MC4wLjA.&_ga=2.66923502.174841559.1734639641-983296813.1734639641) for more information.
+The `ballerinax/hubspot.crm.object.leads` package offers APIs to connect and interact with the [HubSpot CRM Leads API](https://developers.hubspot.com/docs/reference/api/crm/objects/leads) endpoints, specifically based on the [HubSpot REST API v3](https://developers.hubspot.com/docs/reference/api/overview).
 
 ## Setup guide
 
@@ -34,21 +30,21 @@ Within app developer accounts, you can create developer test accounts to test ap
 
 1. Go to Test Account section from the left sidebar.
 
-   ![Hubspot developer portal](docs/setup/resources/test_acc_1.png)
+   ![Hubspot developer portal](https://github.com/ballerina-platform/module-ballerinax-hubspot.crm.object.leads/tree/38bfdb49b5b8d209729700d8e52961f6a08d632f/docs/setup/resources/test_acc_1.png)
 
 2. Click Create developer test account.
 
-   ![Hubspot developer testacc](docs/setup/resources/test_acc_2.png)
+   ![Hubspot developer testacc](https://github.com/ballerina-platform/module-ballerinax-hubspot.crm.object.leads/tree/38bfdb49b5b8d209729700d8e52961f6a08d632f/docs/setup/resources/test_acc_2.png)
 
 3. In the dialogue box, give a name to your test account and click create.
 
-   ![Hubspot developer testacc_creation_3](docs/setup/resources/test_acc_3.png)
+   ![Hubspot developer testacc_creation_3](https://github.com/ballerina-platform/module-ballerinax-hubspot.crm.object.leads/tree/38bfdb49b5b8d209729700d8e52961f6a08d632f/docs/setup/resources/test_acc_3.png)
 
 ### Step 3: Create a HubSpot App under your account.
 
 1. In your developer account, navigate to the "Apps" section. Click on "Create App"
 
-   ![Hubspot app creation 1](docs/setup/resources/create_app_1.png)
+   ![Hubspot app creation 1](https://github.com/ballerina-platform/module-ballerinax-hubspot.crm.object.leads/tree/38bfdb49b5b8d209729700d8e52961f6a08d632f/docs/setup/resources/create_app_1.png)
 
 2. Provide the necessary details, including the app name and description.
 
@@ -56,7 +52,7 @@ Within app developer accounts, you can create developer test accounts to test ap
 
 1. Move to the Auth Tab.
 
-   ![Hubspot app auth setup 1](docs/setup/resources/create_app_2.png)
+   ![Hubspot app auth setup 1](https://github.com/ballerina-platform/module-ballerinax-hubspot.crm.object.leads/tree/38bfdb49b5b8d209729700d8e52961f6a08d632f/docs/setup/resources/create_app_2.png)
 
 2. In the Scopes section, add the following scopes for your app using the "Add new scope" button.
 
@@ -64,17 +60,17 @@ Within app developer accounts, you can create developer test accounts to test ap
 
    `crm.objects.leads.write`
 
-   ![Hubspot app auth setup 2](docs/setup/resources/scope_set.png)
+   ![Hubspot app auth setup 2](https://github.com/ballerina-platform/module-ballerinax-hubspot.crm.object.leads/tree/38bfdb49b5b8d209729700d8e52961f6a08d632f/docs/setup/resources/scope_set.png)
 
 4. Add your Redirect URI in the relevant section. You can also use localhost addresses for local development purposes. Click Create App.
 
-   ![Hubspot app auth setup 3](docs/setup/resources/create_app_final.png)
+   ![Hubspot app auth setup 3](https://github.com/ballerina-platform/module-ballerinax-hubspot.crm.object.leads/tree/38bfdb49b5b8d209729700d8e52961f6a08d632f/docs/setup/resources/create_app_final.png)
 
 ### Step 5: Get your Client ID and Client Secret
 
 - Navigate to the Auth section of your app. Make sure to save the provided Client ID and Client Secret.
 
-   ![Hubspot app auth setup 5](docs/setup/resources/get_credentials.png)
+   ![Hubspot app auth setup 5](https://github.com/ballerina-platform/module-ballerinax-hubspot.crm.object.leads/tree/38bfdb49b5b8d209729700d8e52961f6a08d632f/docs/setup/resources/get_credentials.png)
 
 ### Step 6: Setup Authentication Flow
 
@@ -88,11 +84,11 @@ Before proceeding with the Quickstart, ensure you have obtained the Access Token
 
     Alternatively the link can be obtained from Hubspot.
 
-    ![Hubspot get auth code](docs/setup/resources/get_auth_code.png)
+    ![Hubspot get auth code](https://github.com/ballerina-platform/module-ballerinax-hubspot.crm.object.leads/tree/38bfdb49b5b8d209729700d8e52961f6a08d632f/docs/setup/resources/get_auth_code.png)
 
 2. Paste it in the browser and select your developer test account to intall the app when prompted.
 
-   ![Hubspot app install](docs/setup/resources/install_app.png)
+   ![Hubspot app install](https://github.com/ballerina-platform/module-ballerinax-hubspot.crm.object.leads/tree/38bfdb49b5b8d209729700d8e52961f6a08d632f/docs/setup/resources/install_app.png)
 
 3. A code will be displayed in the browser. Copy the code.
 
@@ -139,7 +135,7 @@ To use the `HubSpot CRM Leads Connector` in your Ballerina application, update t
 Import the `hubspot.crm.objects.leads` module and `oauth2` module.
 
 ```ballerina
-import ballerinax/hubspot.crm.objects.leads as hsleads;
+import ballerinax/hubspot.crm.objects.leads as leads;
 import ballerina/oauth2;
 ```
 
@@ -153,23 +149,21 @@ import ballerina/oauth2;
     refreshToken = "<Refresh Token>"
    ```
 
-2. Instantiate a `hsleads:ConnectionConfig` with the obtained credentials and initialize the connector with it.
+2. Instantiate a `hsLeads:ConnectionConfig` with the obtained credentials and initialize the connector with it.
 
     ```ballerina 
     configurable string clientId = ?;
     configurable string clientSecret = ?;
     configurable string refreshToken = ?;
 
-    final hsleads:ConnectionConfig hsleadsConfig = {
-        auth : {
-            clientId,
-            clientSecret,
-            refreshToken,
-            credentialBearer: oauth2:POST_BODY_BEARER
-        }
+    final leads:ConnectionConfig auth = {
+         clientId,
+         clientSecret,
+         refreshToken,
+         credentialBearer: oauth2:POST_BODY_BEARER
     };
 
-    final hsleads:Client hsleads = check new (hsleadsConfig);
+    final leads:Client hsLeads = check new ({auth});
     ```
 
 ### Step 3: Invoke the connector operation
@@ -180,7 +174,7 @@ Now, utilize the available connector operations. A sample usecase is shown below
     
 ```ballerina
 public function main() returns error? {
-   SimplePublicObjectInputForCreate payload = {
+   hsLeads:SimplePublicObjectInputForCreate payload = {
       {
          "associations": [
             {
@@ -200,7 +194,7 @@ public function main() returns error? {
          }
       }
    }
-   hsleads:SimplePublicObject createLead = check hsleads->/.post(payload);
+   hsLeads:SimplePublicObject createLead = check hsLeads->/.post(payload);
 }
 ```
 
@@ -212,10 +206,10 @@ bal run
 
 ## Examples
 
-The `Ballerina HubSpot CRM Leads Connector` connector provides practical examples illustrating usage in various scenarios. Explore these [examples](https://github.com/ballerina-platform/module-ballerinax-hubspot.crm.object.leads/tree/38bfdb49b5b8d209729700d8e52961f6a08d632f/examples), covering the following use cases:
+The `ballerinax/hubspot.crm.object.leads` connector provides practical examples illustrating usage in various scenarios. Explore these examples, covering the following use cases:
 
-- [Real Estate Inquiry Leads](examples/real_estate_inquiry_leads)
-- [Fitness Center Leads](examples/fitness_center_leads)
+- [**Real Estate Inquiry Leads**](https://github.com/ballerina-platform/module-ballerinax-hubspot.crm.object.leads/tree/38bfdb49b5b8d209729700d8e52961f6a08d632f/examples/real_estate_inquiry_leads): Learn how the HubSpot API can be used to manage and process leads from real estate inquiries.
+- [**Fitness Center Leads**](https://github.com/ballerina-platform/module-ballerinax-hubspot.crm.object.leads/tree/38bfdb49b5b8d209729700d8e52961f6a08d632f/examples/fitness_center_leads): Discover how the HubSpot API can be utilized to handle leads for fitness center memberships and services.
 
 ## Build from the source
 

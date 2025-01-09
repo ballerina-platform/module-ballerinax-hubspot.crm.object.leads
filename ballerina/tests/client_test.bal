@@ -31,8 +31,7 @@ OAuth2RefreshTokenGrantConfig auth = {
     credentialBearer: oauth2:POST_BODY_BEARER // this line should be added in to when you are going to create auth object.
 };
 
-ConnectionConfig config = {auth: auth};
-final Client _client = check new (config, serviceUrl);
+final Client hsLeads = check new ({auth}, serviceUrl);
 
 string testLeadCreatedId = "";
 int testLeadCount = 0;
@@ -59,7 +58,7 @@ function testCreateLead() returns error? {
         }
     };
 
-    SimplePublicObject response = check _client->/.post(payload);
+    SimplePublicObject response = check hsLeads->/.post(payload);
     test:assertNotEquals(response.id, "", msg = "Lead creation failed: Missing ID.");
     test:assertEquals(response.properties["hs_lead_name"], payload.properties["hs_lead_name"], msg = "Invalid lead name.");
     testLeadCreatedId = response.id;
@@ -67,7 +66,7 @@ function testCreateLead() returns error? {
 
 @test:Config {dependsOn: [testCreateLead]}
 function testGetLeads() returns error? {
-    CollectionResponseSimplePublicObjectWithAssociationsForwardPaging response = check _client->/.get();
+    CollectionResponseSimplePublicObjectWithAssociationsForwardPaging response = check hsLeads->/.get();
     test:assertNotEquals(response.results.length(), 0, msg = "Invalid number of leads returned.");
     test:assertTrue(response.results[0].id != "", msg = "Invalid lead ID.");
     testLeadCount = response.results.length();
@@ -76,7 +75,7 @@ function testGetLeads() returns error? {
 @test:Config {dependsOn: [testCreateLead]}
 function testGetLeadById() returns error? {
     string leadsId = testLeadCreatedId;
-    SimplePublicObjectWithAssociations response = check _client->/[leadsId].get();
+    SimplePublicObjectWithAssociations response = check hsLeads->/[leadsId].get();
     test:assertEquals(response.id, leadsId, msg = "Invalid lead ID.");
     test:assertNotEquals(response.properties, (), msg = "Lead retrieval failed: Missing properties.");
 }
@@ -90,14 +89,14 @@ function testUpdateLead() returns error? {
         }
     };
 
-    SimplePublicObject response = check _client->/[testLeadCreatedId].patch(payload);
+    SimplePublicObject response = check hsLeads->/[testLeadCreatedId].patch(payload);
     // io:println("update:",response,"\n");
     test:assertEquals(response.properties["hs_lead_name"], payload.properties["hs_lead_name"], msg = "Invalid lead name.");
 }
 
 @test:Config {dependsOn: [testGetLeadById]}
 function testDeleteLead() returns error? {
-    http:Response response = check _client->/[testLeadCreatedId].delete();
+    http:Response response = check hsLeads->/[testLeadCreatedId].delete();
     test:assertEquals(response.statusCode, http:STATUS_NO_CONTENT, msg = "Lead deletion failed.");
 }
 
@@ -145,7 +144,7 @@ function testBatchCreateLeads() returns error? {
             }
         ]
     };
-    BatchResponseSimplePublicObject response = check _client->/batch/create.post(payload);
+    BatchResponseSimplePublicObject response = check hsLeads->/batch/create.post(payload);
     foreach SimplePublicObject item in response.results {
         testBatchCreateIds.push(item.id);
     }
@@ -159,7 +158,7 @@ function testBatchReadLeads() returns error? {
         properties: ["hs_lead_name"],
         propertiesWithHistory: []
     };
-    BatchResponseSimplePublicObject response = check _client->/batch/read.post(payload);
+    BatchResponseSimplePublicObject response = check hsLeads->/batch/read.post(payload);
     test:assertEquals(response.results.length(), 2, msg = "Batch lead read failed.");
 }
 
@@ -171,7 +170,7 @@ function testBatchUpdateLeads() returns error? {
             {id: testBatchCreateIds[1], properties: {"hs_lead_name": "Ohn Updated"}}
         ]
     };
-    BatchResponseSimplePublicObject response = check _client->/batch/update.post(payload);
+    BatchResponseSimplePublicObject response = check hsLeads->/batch/update.post(payload);
     test:assertEquals(response.results.length(), 2, msg = "Batch lead update failed.");
     map<string> idToNameMap = {
         [testBatchCreateIds[0]]: payload.inputs[0].properties["hs_lead_name"].toString(),
@@ -189,21 +188,10 @@ function testSearchLeads() returns error? {
         query: "John",
         properties: ["hs_lead_name"]
     };
-    CollectionResponseWithTotalSimplePublicObjectForwardPaging response = check _client->/search.post(payload);
+    CollectionResponseWithTotalSimplePublicObjectForwardPaging response = check hsLeads->/search.post(payload);
     test:assertNotEquals(response.total, 0, msg = "Lead search failed.");
     test:assertNotEquals(response.results.length(), 0, msg = "Lead search failed.");
 }
-
-// @test:Config {dependsOn: [testSearchLeads]}
-// function testBatchUpsertLeads() returns error? {
-//     BatchInputSimplePublicObjectBatchInputUpsert payload = {
-//         inputs: [
-//             {idProperty: "hs_lead_name", id: "395042111139", properties: { "hs_lead_name": "John Doe Upsert" } }
-//         ]
-//     };
-//     BatchResponseSimplePublicUpsertObject response = check _client->/batch/upsert.post(payload);
-//     test:assertEquals(response.results.length(), 2, msg = "Batch lead upsert failed.");
-// }
 
 @test:Config {dependsOn: [testSearchLeads]}
 function testBatchArchiveLeads() returns error? {
@@ -211,6 +199,6 @@ function testBatchArchiveLeads() returns error? {
         inputs: [{id: testBatchCreateIds[0]}, {id: testBatchCreateIds[1]}]
     };
 
-    http:Response result = check _client->/batch/archive.post(payload);
+    http:Response result = check hsLeads->/batch/archive.post(payload);
     test:assertEquals(result.statusCode, http:STATUS_NO_CONTENT, msg = "Batch lead archive failed.");
 }

@@ -150,8 +150,7 @@ service /mock on new http:Listener(9090) {
                     updatedAt: "2023-09-02T00:00:00Z"
                 }
             ],
-            total: 2,
-            paging: {next: null}
+            total: 2
         };
         return response;
     }

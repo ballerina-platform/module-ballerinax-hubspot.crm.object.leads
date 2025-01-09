@@ -25,17 +25,16 @@ configurable string clientSecret = ?;
 configurable string refreshToken = ?;
 
 // Client initialization
-final leads:Client leadClient = check initializeLeadClient();
+final leads:Client hsLeads = check initClient();
 
-function initializeLeadClient() returns leads:Client|error {
+function initClient() returns leads:Client|error {
     leads:OAuth2RefreshTokenGrantConfig auth = {
         clientId: clientId,
         clientSecret: clientSecret,
         refreshToken: refreshToken,
         credentialBearer: oauth2:POST_BODY_BEARER
     };
-    leads:ConnectionConfig config = {auth: auth};
-    return new leads:Client(config);
+    return new ({auth});
 }
 
 function createLeadWithContact(string leadName, string contactId) returns leads:SimplePublicObject|error {
@@ -57,7 +56,7 @@ function createLeadWithContact(string leadName, string contactId) returns leads:
             "hs_lead_name": leadName
         }
     };
-    return leadClient->/.post(payload);
+    return hsLeads->/.post(payload);
 }
 
 function updateLeadName(string leadId, string newName) returns leads:SimplePublicObject|error {
@@ -66,22 +65,22 @@ function updateLeadName(string leadId, string newName) returns leads:SimplePubli
             "hs_lead_name": newName
         }
     };
-    return leadClient->/[leadId].patch(payload);
+    return hsLeads->/[leadId].patch(payload);
 }
 
 function getLeadById(string leadId) returns leads:SimplePublicObjectWithAssociations|error {
     leads:GetCrmV3ObjectsLeadsLeadsid_getbyidQueries query = {
         "properties": ["hs_lead_name"]
     };
-    return leadClient->/[leadId].get({}, query);
+    return hsLeads->/[leadId].get({}, query);
 }
 
 function getAllLeads(boolean archived = false) returns leads:CollectionResponseSimplePublicObjectWithAssociationsForwardPaging|error {
-    return leadClient->/.get(archived = archived);
+    return hsLeads->/.get(archived = archived);
 }
 
 function deleteLead(string leadId) returns http:Response|error {
-    return leadClient->/[leadId].delete();
+    return hsLeads->/[leadId].delete();
 }
 
 public function main() returns error? {
@@ -106,6 +105,4 @@ public function main() returns error? {
     // Delete the created lead
     http:Response deleteResponse = check deleteLead(createdLead.id);
     io:println("Lead deleted successfully: ", deleteResponse.statusCode);
-
-    return ();
 }
