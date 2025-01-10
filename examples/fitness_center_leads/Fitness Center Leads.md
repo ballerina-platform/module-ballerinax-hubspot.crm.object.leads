@@ -4,7 +4,7 @@ This use case demonstrates how the HubSpot API can be utilized to manage leads f
 
 ## Prerequisites
 
-1. Create a HubSpot application to authenticate the connector as described in the [Setup guide](https://github.com/ballerina-platform/module-ballerinax-hubspot.crm.object.leads/blob/38bfdb49b5b8d209729700d8e52961f6a08d632f/ballerina/Package.md#setup-guide).
+1. Create a HubSpot application to authenticate the connector as described in the [Setup guide](https://github.com/ballerina-platform/module-ballerinax-hubspot.crm.object.leads/blob/main/ballerina/Package.md#setup-guide).
 
 2. Create a `Config.toml` file in the example's root directory and provide your HubSpot account-related configurations as follows:
 
