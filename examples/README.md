@@ -7,7 +7,7 @@ The `ballerinax/hubspot.crm.object.leads` connector provides practical examples 
 
 ## Prerequisites
 
-1. Create a huspot application to authenticate the connecter as described in the [Setup guide](../ballerina/Package.md)
+1. Create a huspot application to authenticate the connecter as described in the [Setup guide](https://github.com/ballerina-platform/module-ballerinax-hubspot.crm.object.leads/blob/38bfdb49b5b8d209729700d8e52961f6a08d632f/ballerina/Package.md#setup-guide)
 2. For each example, create a `Config.toml` file the related configuration. Here's an example of how your `Config.toml` file should look:
 
     ```toml
