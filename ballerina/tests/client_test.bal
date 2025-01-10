@@ -16,25 +16,40 @@
 
 import ballerina/http;
 import ballerina/oauth2;
+import ballerina/os;
 import ballerina/test;
 
-configurable string clientId = ?;
-configurable string clientSecret = ?;
-configurable boolean isLiveServer = ?;
-configurable string serviceUrl = isLiveServer ? "https://api.hubapi.com/crm/v3/objects/leads" : "http://localhost:9090/mock/crm/v3/objects/leads";
-configurable string refreshToken = ?;
+final boolean isLiveServer = os:getEnv("IS_LIVE_SERVER") == "true";
+final string serviceUrl = isLiveServer ? "https://api.hubapi.com/crm/v3/objects/leads" : "http://localhost:9090/mock/crm/v3/objects/leads";
 
-OAuth2RefreshTokenGrantConfig auth = {
-    clientId: clientId,
-    clientSecret: clientSecret,
-    refreshToken: refreshToken,
-    credentialBearer: oauth2:POST_BODY_BEARER // this line should be added in to when you are going to create auth object.
-};
+final string clientId = os:getEnv("HUBSPOT_CLIENT_ID");
+final string clientSecret = os:getEnv("HUBSPOT_CLIENT_SECRET");
+final string refreshToken = os:getEnv("HUBSPOT_REFRESH_TOKEN");
 
-final Client hsLeads = check new ({auth}, serviceUrl);
+
+final Client hsLeads = check initClient();
+
+isolated function initClient() returns Client|error {
+    if isLiveServer {
+        OAuth2RefreshTokenGrantConfig auth = {
+            clientId: clientId,
+            clientSecret: clientSecret,
+            refreshToken: refreshToken,
+            credentialBearer: oauth2:POST_BODY_BEARER
+        };
+        return check new ({auth}, serviceUrl);
+    }
+    return check new ({
+        auth: {
+            token: "test-token"
+        }
+    }, serviceUrl);
+}
 
 string testLeadCreatedId = "";
-int testLeadCount = 0;
+string[] testBatchCreateIds = [];
+
+// Core
 
 @test:Config {
     groups: ["live_tests", "mock_tests"]
@@ -74,7 +89,6 @@ function testGetLeads() returns error? {
     CollectionResponseSimplePublicObjectWithAssociationsForwardPaging response = check hsLeads->/.get();
     test:assertNotEquals(response.results.length(), 0, msg = "Invalid number of leads returned.");
     test:assertTrue(response.results[0].id != "", msg = "Invalid lead ID.");
-    testLeadCount = response.results.length();
 }
 
 @test:Config {
@@ -82,9 +96,8 @@ function testGetLeads() returns error? {
     groups: ["live_tests", "mock_tests"]
 }
 function testGetLeadById() returns error? {
-    string leadsId = testLeadCreatedId;
-    SimplePublicObjectWithAssociations response = check hsLeads->/[leadsId].get();
-    test:assertEquals(response.id, leadsId, msg = "Invalid lead ID.");
+    SimplePublicObjectWithAssociations response = check hsLeads->/[testLeadCreatedId].get();
+    test:assertEquals(response.id, testLeadCreatedId, msg = "Invalid lead ID.");
     test:assertNotEquals(response.properties, (), msg = "Lead retrieval failed: Missing properties.");
 }
 
@@ -101,7 +114,6 @@ function testUpdateLead() returns error? {
     };
 
     SimplePublicObject response = check hsLeads->/[testLeadCreatedId].patch(payload);
-    // io:println("update:",response,"\n");
     test:assertEquals(response.properties["hs_lead_name"], payload.properties["hs_lead_name"], msg = "Invalid lead name.");
 }
 
@@ -114,7 +126,7 @@ function testDeleteLead() returns error? {
     test:assertEquals(response.statusCode, http:STATUS_NO_CONTENT, msg = "Lead deletion failed.");
 }
 
-string[] testBatchCreateIds = [];
+// Batch
 
 @test:Config {
     groups: ["live_tests", "mock_tests"]
