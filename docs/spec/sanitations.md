@@ -6,7 +6,7 @@ _Edition_: Swan Lake
 # Sanitation for OpenAPI specification
 
 This document records the sanitation done on top of the official OpenAPI specification from Ballerina HubSpot CRM Leads Connector. 
-The OpenAPI specification is obtained from (TODO: Add source link).
+The OpenAPI specification is obtained from ["Hubspot API Reference](https://github.com/HubSpot/HubSpot-public-api-spec-collection/blob/402616baec042e147306b92cd551b84d44708127/PublicApiSpecs/CRM/Leads/Rollouts/424/v3/leads.json).
 These changes are done in order to improve the overall usability, and as workarounds for some known language limitations.
 
 [//]: # (TODO: Add sanitation details)
