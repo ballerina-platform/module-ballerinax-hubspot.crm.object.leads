@@ -36,7 +36,9 @@ final Client hsLeads = check new ({auth}, serviceUrl);
 string testLeadCreatedId = "";
 int testLeadCount = 0;
 
-@test:Config {}
+@test:Config {
+    groups: ["live_tests", "mock_tests"]
+}
 function testCreateLead() returns error? {
     SimplePublicObjectInputForCreate payload = {
         "associations": [
@@ -64,7 +66,10 @@ function testCreateLead() returns error? {
     testLeadCreatedId = response.id;
 }
 
-@test:Config {dependsOn: [testCreateLead]}
+@test:Config {
+    dependsOn: [testCreateLead],
+    groups: ["live_tests", "mock_tests"]
+}
 function testGetLeads() returns error? {
     CollectionResponseSimplePublicObjectWithAssociationsForwardPaging response = check hsLeads->/.get();
     test:assertNotEquals(response.results.length(), 0, msg = "Invalid number of leads returned.");
@@ -72,7 +77,10 @@ function testGetLeads() returns error? {
     testLeadCount = response.results.length();
 }
 
-@test:Config {dependsOn: [testCreateLead]}
+@test:Config {
+    dependsOn: [testCreateLead],
+    groups: ["live_tests", "mock_tests"]
+}
 function testGetLeadById() returns error? {
     string leadsId = testLeadCreatedId;
     SimplePublicObjectWithAssociations response = check hsLeads->/[leadsId].get();
@@ -80,7 +88,10 @@ function testGetLeadById() returns error? {
     test:assertNotEquals(response.properties, (), msg = "Lead retrieval failed: Missing properties.");
 }
 
-@test:Config {dependsOn: [testGetLeadById]}
+@test:Config {
+    dependsOn: [testGetLeadById],
+    groups: ["live_tests", "mock_tests"]
+}
 function testUpdateLead() returns error? {
     SimplePublicObjectInput payload = {
         "objectWriteTraceId": "string",
@@ -94,7 +105,10 @@ function testUpdateLead() returns error? {
     test:assertEquals(response.properties["hs_lead_name"], payload.properties["hs_lead_name"], msg = "Invalid lead name.");
 }
 
-@test:Config {dependsOn: [testGetLeadById]}
+@test:Config {
+    dependsOn: [testGetLeadById],
+    groups: ["live_tests", "mock_tests"]
+}
 function testDeleteLead() returns error? {
     http:Response response = check hsLeads->/[testLeadCreatedId].delete();
     test:assertEquals(response.statusCode, http:STATUS_NO_CONTENT, msg = "Lead deletion failed.");
@@ -102,7 +116,9 @@ function testDeleteLead() returns error? {
 
 string[] testBatchCreateIds = [];
 
-@test:Config {}
+@test:Config {
+    groups: ["live_tests", "mock_tests"]
+}
 function testBatchCreateLeads() returns error? {
     BatchInputSimplePublicObjectInputForCreate payload = {
         inputs: [
@@ -151,7 +167,10 @@ function testBatchCreateLeads() returns error? {
     test:assertEquals(response.results.length(), 2, msg = "Batch lead creation failed.");
 }
 
-@test:Config {dependsOn: [testBatchCreateLeads]}
+@test:Config {
+    dependsOn: [testBatchCreateLeads],
+    groups: ["live_tests", "mock_tests"]
+}
 function testBatchReadLeads() returns error? {
     BatchReadInputSimplePublicObjectId payload = {
         inputs: [{id: testBatchCreateIds[0]}, {id: testBatchCreateIds[1]}],
@@ -162,7 +181,10 @@ function testBatchReadLeads() returns error? {
     test:assertEquals(response.results.length(), 2, msg = "Batch lead read failed.");
 }
 
-@test:Config {dependsOn: [testBatchReadLeads]}
+@test:Config {
+    dependsOn: [testBatchReadLeads],
+    groups: ["live_tests", "mock_tests"]
+}
 function testBatchUpdateLeads() returns error? {
     BatchInputSimplePublicObjectBatchInput payload = {
         inputs: [
@@ -182,7 +204,10 @@ function testBatchUpdateLeads() returns error? {
     }
 }
 
-@test:Config {dependsOn: [testBatchUpdateLeads]}
+@test:Config {
+    dependsOn: [testBatchUpdateLeads],
+    groups: ["live_tests", "mock_tests"]
+}
 function testSearchLeads() returns error? {
     PublicObjectSearchRequest payload = {
         query: "John",
@@ -193,7 +218,10 @@ function testSearchLeads() returns error? {
     test:assertNotEquals(response.results.length(), 0, msg = "Lead search failed.");
 }
 
-@test:Config {dependsOn: [testSearchLeads]}
+@test:Config {
+    dependsOn: [testSearchLeads],
+    groups: ["live_tests", "mock_tests"]
+}
 function testBatchArchiveLeads() returns error? {
     BatchInputSimplePublicObjectId payload = {
         inputs: [{id: testBatchCreateIds[0]}, {id: testBatchCreateIds[1]}]
