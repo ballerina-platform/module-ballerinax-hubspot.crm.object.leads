@@ -14,7 +14,7 @@ The `ballerinax/hubspot.crm.object.leads` package offers APIs to connect and int
 
 ## Setup guide
 
-To use the HubSpot Marketing Events connector, you must have access to the HubSpot API through a HubSpot developer account and a HubSpot App under it. Therefore you need to register for a developer account at HubSpot if you don't have one already.
+To use the HubSpot CRM Leads connector, you must have access to the HubSpot API through a HubSpot developer account and a HubSpot App under it. Therefore you need to register for a developer account at HubSpot if you don't have one already.
 
 ### Step 1: Create/Login to a HubSpot Developer Account
 
@@ -132,10 +132,10 @@ To use the `HubSpot CRM Leads Connector` in your Ballerina application, update t
 
 ### Step 1: Import the module
 
-Import the `hubspot.crm.objects.leads` module and `oauth2` module.
+Import the `hubspot.crm.obj.leads` module and `oauth2` module.
 
 ```ballerina
-import ballerinax/hubspot.crm.objects.leads as leads;
+import ballerinax/hubspot.crm.obj.leads as leads;
 import ballerina/oauth2;
 ```
 
@@ -206,7 +206,7 @@ bal run
 
 ## Examples
 
-The `ballerinax/hubspot.crm.object.leads` connector provides practical examples illustrating usage in various scenarios. Explore these examples, covering the following use cases:
+The `ballerinax/hubspot.crm.obj.leads` connector provides practical examples illustrating usage in various scenarios. Explore these examples, covering the following use cases:
 
 - [**Real Estate Inquiry Leads**](https://github.com/ballerina-platform/module-ballerinax-hubspot.crm.object.leads/tree/main/examples/real_estate_inquiry_leads): Learn how the HubSpot API can be used to manage and process leads from real estate inquiries.
 - [**Fitness Center Leads**](https://github.com/ballerina-platform/module-ballerinax-hubspot.crm.object.leads/tree/main/examples/fitness_center_leads): Discover how the HubSpot API can be utilized to handle leads for fitness center memberships and services.
