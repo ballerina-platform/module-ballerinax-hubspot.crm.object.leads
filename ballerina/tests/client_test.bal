@@ -76,8 +76,8 @@ function testCreateLead() returns error? {
     };
 
     SimplePublicObject response = check hsLeads->/.post(payload);
-    test:assertNotEquals(response.id, "", msg = "Lead creation failed: Missing ID.");
-    test:assertEquals(response.properties["hs_lead_name"], payload.properties["hs_lead_name"], msg = "Invalid lead name.");
+    test:assertNotEquals(response.id, "");
+    test:assertEquals(response.properties["hs_lead_name"], payload.properties["hs_lead_name"]);
     testLeadCreatedId = response.id;
 }
 
@@ -87,8 +87,8 @@ function testCreateLead() returns error? {
 }
 function testGetLeads() returns error? {
     CollectionResponseSimplePublicObjectWithAssociationsForwardPaging response = check hsLeads->/.get();
-    test:assertNotEquals(response.results.length(), 0, msg = "Invalid number of leads returned.");
-    test:assertTrue(response.results[0].id != "", msg = "Invalid lead ID.");
+    test:assertNotEquals(response.results.length(), 0);
+    test:assertTrue(response.results[0].id != "");
 }
 
 @test:Config {
@@ -97,8 +97,8 @@ function testGetLeads() returns error? {
 }
 function testGetLeadById() returns error? {
     SimplePublicObjectWithAssociations response = check hsLeads->/[testLeadCreatedId].get();
-    test:assertEquals(response.id, testLeadCreatedId, msg = "Invalid lead ID.");
-    test:assertNotEquals(response.properties, (), msg = "Lead retrieval failed: Missing properties.");
+    test:assertEquals(response.id, testLeadCreatedId);
+    test:assertNotEquals(response.properties, ());
 }
 
 @test:Config {
@@ -114,7 +114,7 @@ function testUpdateLead() returns error? {
     };
 
     SimplePublicObject response = check hsLeads->/[testLeadCreatedId].patch(payload);
-    test:assertEquals(response.properties["hs_lead_name"], payload.properties["hs_lead_name"], msg = "Invalid lead name.");
+    test:assertEquals(response.properties["hs_lead_name"], payload.properties["hs_lead_name"]);
 }
 
 @test:Config {
@@ -123,7 +123,7 @@ function testUpdateLead() returns error? {
 }
 function testDeleteLead() returns error? {
     http:Response response = check hsLeads->/[testLeadCreatedId].delete();
-    test:assertEquals(response.statusCode, http:STATUS_NO_CONTENT, msg = "Lead deletion failed.");
+    test:assertEquals(response.statusCode, http:STATUS_NO_CONTENT);
 }
 
 // Batch
@@ -176,7 +176,7 @@ function testBatchCreateLeads() returns error? {
     foreach SimplePublicObject item in response.results {
         testBatchCreateIds.push(item.id);
     }
-    test:assertEquals(response.results.length(), 2, msg = "Batch lead creation failed.");
+    test:assertEquals(response.results.length(), 2);
 }
 
 @test:Config {
@@ -190,7 +190,7 @@ function testBatchReadLeads() returns error? {
         propertiesWithHistory: []
     };
     BatchResponseSimplePublicObject response = check hsLeads->/batch/read.post(payload);
-    test:assertEquals(response.results.length(), 2, msg = "Batch lead read failed.");
+    test:assertEquals(response.results.length(), 2);
 }
 
 @test:Config {
@@ -205,14 +205,14 @@ function testBatchUpdateLeads() returns error? {
         ]
     };
     BatchResponseSimplePublicObject response = check hsLeads->/batch/update.post(payload);
-    test:assertEquals(response.results.length(), 2, msg = "Batch lead update failed.");
+    test:assertEquals(response.results.length(), 2);
     map<string> idToNameMap = {
         [testBatchCreateIds[0]]: payload.inputs[0].properties["hs_lead_name"].toString(),
         [testBatchCreateIds[1]]: payload.inputs[1].properties["hs_lead_name"].toString()
     };
 
     foreach SimplePublicObject result in response.results {
-        test:assertEquals(result.properties["hs_lead_name"], idToNameMap[result.id], msg = "Invalid lead name.");
+        test:assertEquals(result.properties["hs_lead_name"], idToNameMap[result.id]);
     }
 }
 
@@ -226,8 +226,8 @@ function testSearchLeads() returns error? {
         properties: ["hs_lead_name"]
     };
     CollectionResponseWithTotalSimplePublicObjectForwardPaging response = check hsLeads->/search.post(payload);
-    test:assertNotEquals(response.total, 0, msg = "Lead search failed.");
-    test:assertNotEquals(response.results.length(), 0, msg = "Lead search failed.");
+    test:assertNotEquals(response.total, 0);
+    test:assertNotEquals(response.results.length(), 0);
 }
 
 @test:Config {
@@ -240,5 +240,5 @@ function testBatchArchiveLeads() returns error? {
     };
 
     http:Response result = check hsLeads->/batch/archive.post(payload);
-    test:assertEquals(result.statusCode, http:STATUS_NO_CONTENT, msg = "Batch lead archive failed.");
+    test:assertEquals(result.statusCode, http:STATUS_NO_CONTENT);
 }
