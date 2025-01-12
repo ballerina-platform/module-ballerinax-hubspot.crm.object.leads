@@ -20,7 +20,7 @@ import ballerina/os;
 import ballerina/test;
 
 final boolean isLiveServer = os:getEnv("IS_LIVE_SERVER") == "true";
-final string serviceUrl = isLiveServer ? "https://api.hubapi.com/crm/v3/objects/leads" : "http://localhost:9090/mock/crm/v3/objects/leads";
+final string serviceUrl = isLiveServer ? "https://api.hubapi.com/crm/v3/objects/leads" : "http://localhost:9090/mock";
 
 final string clientId = os:getEnv("HUBSPOT_CLIENT_ID");
 final string clientSecret = os:getEnv("HUBSPOT_CLIENT_SECRET");

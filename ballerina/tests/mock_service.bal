@@ -19,7 +19,7 @@ import ballerina/random;
 
 service /mock on new http:Listener(9090) {
 
-    resource function get crm/v3/objects/leads(http:Request req) returns CollectionResponseSimplePublicObjectWithAssociationsForwardPaging {
+    resource function get .(http:Request req) returns CollectionResponseSimplePublicObjectWithAssociationsForwardPaging {
         CollectionResponseSimplePublicObjectWithAssociationsForwardPaging response = {
             results: [
                 {
@@ -40,7 +40,7 @@ service /mock on new http:Listener(9090) {
         return response;
     }
 
-    resource function get crm/v3/objects/leads/[string leadsId](http:Request req) returns SimplePublicObjectWithAssociations {
+    resource function get [string leadsId](http:Request req) returns SimplePublicObjectWithAssociations {
         SimplePublicObjectWithAssociations response = {
             id: leadsId,
             properties: {"hs_lead_name": "Lead One", "email": "leadone@example.com"},
@@ -50,7 +50,7 @@ service /mock on new http:Listener(9090) {
         return response;
     }
 
-    resource function post crm/v3/objects/leads(http:Request req, @http:Payload SimplePublicObjectInputForCreate payload) returns SimplePublicObject {
+    resource function post .(http:Request req, @http:Payload SimplePublicObjectInputForCreate payload) returns SimplePublicObject {
         SimplePublicObject response = {
             id: random:createDecimal().toString(),
             "associations": payload.associations,
@@ -61,7 +61,7 @@ service /mock on new http:Listener(9090) {
         return response;
     }
 
-    resource function patch crm/v3/objects/leads/[string leadsId](http:Request req, @http:Payload SimplePublicObjectInput payload) returns SimplePublicObject {
+    resource function patch [string leadsId](http:Request req, @http:Payload SimplePublicObjectInput payload) returns SimplePublicObject {
         SimplePublicObject response = {
             id: leadsId,
             properties: payload.properties,
@@ -71,19 +71,19 @@ service /mock on new http:Listener(9090) {
         return response;
     }
 
-    resource function delete crm/v3/objects/leads/[string leadsId](http:Request req) returns http:Response {
+    resource function delete [string leadsId](http:Request req) returns http:Response {
         http:Response response = new;
         response.statusCode = 204;
         return response;
     }
 
-    resource function post crm/v3/objects/leads/batch/archive(http:Request req, @http:Payload BatchInputSimplePublicObjectId payload) returns http:Response {
+    resource function post batch/archive(http:Request req, @http:Payload BatchInputSimplePublicObjectId payload) returns http:Response {
         http:Response response = new;
         response.statusCode = 204;
         return response;
     }
 
-    resource function post crm/v3/objects/leads/batch/create(http:Request req, @http:Payload BatchInputSimplePublicObjectInputForCreate payload) returns BatchResponseSimplePublicObject {
+    resource function post batch/create(http:Request req, @http:Payload BatchInputSimplePublicObjectInputForCreate payload) returns BatchResponseSimplePublicObject {
         BatchResponseSimplePublicObject response = {
             results: payload.inputs.map(function(SimplePublicObjectInputForCreate input) returns SimplePublicObject {
                 return {
@@ -100,7 +100,7 @@ service /mock on new http:Listener(9090) {
         return response;
     }
 
-    resource function post crm/v3/objects/leads/batch/read(http:Request req, @http:Payload BatchReadInputSimplePublicObjectId payload) returns BatchResponseSimplePublicObject {
+    resource function post batch/read(http:Request req, @http:Payload BatchReadInputSimplePublicObjectId payload) returns BatchResponseSimplePublicObject {
         BatchResponseSimplePublicObject response = {
             results: payload.inputs.map(function(SimplePublicObjectId input) returns SimplePublicObject {
                 return {
@@ -117,7 +117,7 @@ service /mock on new http:Listener(9090) {
         return response;
     }
 
-    resource function post crm/v3/objects/leads/batch/update(http:Request req, @http:Payload BatchInputSimplePublicObjectBatchInput payload) returns BatchResponseSimplePublicObject {
+    resource function post batch/update(http:Request req, @http:Payload BatchInputSimplePublicObjectBatchInput payload) returns BatchResponseSimplePublicObject {
         BatchResponseSimplePublicObject response = {
             results: payload.inputs.map(function(SimplePublicObjectBatchInput input) returns SimplePublicObject {
                 return {
@@ -134,7 +134,7 @@ service /mock on new http:Listener(9090) {
         return response;
     }
 
-    resource function post crm/v3/objects/leads/search(http:Request req, @http:Payload PublicObjectSearchRequest payload) returns CollectionResponseWithTotalSimplePublicObjectForwardPaging {
+    resource function post search(http:Request req, @http:Payload PublicObjectSearchRequest payload) returns CollectionResponseWithTotalSimplePublicObjectForwardPaging {
         CollectionResponseWithTotalSimplePublicObjectForwardPaging response = {
             results: [
                 {
