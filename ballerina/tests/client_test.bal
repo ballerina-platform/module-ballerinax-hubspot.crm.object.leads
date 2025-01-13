@@ -26,7 +26,6 @@ final string clientId = os:getEnv("HUBSPOT_CLIENT_ID");
 final string clientSecret = os:getEnv("HUBSPOT_CLIENT_SECRET");
 final string refreshToken = os:getEnv("HUBSPOT_REFRESH_TOKEN");
 
-
 final Client hsLeads = check initClient();
 
 isolated function initClient() returns Client|error {
