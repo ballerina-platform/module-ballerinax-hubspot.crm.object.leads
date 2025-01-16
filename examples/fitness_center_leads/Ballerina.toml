@@ -1,0 +1,7 @@
+[package]
+org = "wso2"
+name = "fitness_center_leads"
+version = "0.1.0"
+
+[build-options]
+observabilityIncluded = true
