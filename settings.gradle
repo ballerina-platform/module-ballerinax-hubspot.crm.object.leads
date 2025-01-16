@@ -29,9 +29,9 @@ plugins {
 
 rootProject.name = 'module-ballerinax-hubspot.crm.object.leads'
 
-include ':hubspot.crm.object.leads-ballerina'
+include ':hubspot.crm.obj.leads-ballerina'
 
-project(':hubspot.crm.object.leads-ballerina').projectDir = file("ballerina")
+project(':hubspot.crm.obj.leads-ballerina').projectDir = file("ballerina")
 
 gradleEnterprise {
     buildScan {
