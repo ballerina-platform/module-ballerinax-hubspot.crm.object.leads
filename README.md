@@ -10,7 +10,7 @@
 
 [HubSpot](https://www.hubspot.com) is an AI-powered customer relationship management (CRM) platform.
 
-The `ballerinax/hubspot.crm.object.leads` package offers APIs to connect and interact with the [HubSpot CRM Leads API](https://developers.hubspot.com/docs/reference/api/crm/objects/leads) endpoints, specifically based on the [HubSpot REST API v3](https://developers.hubspot.com/docs/reference/api/overview).
+The `ballerinax/hubspot.crm.obj.leads` package offers APIs to connect and interact with the [HubSpot CRM Leads API](https://developers.hubspot.com/docs/reference/api/crm/objects/leads) endpoints, specifically based on the [HubSpot REST API v3](https://developers.hubspot.com/docs/reference/api/overview).
 
 ## Setup guide
 
@@ -135,36 +135,36 @@ To use the `HubSpot CRM Leads Connector` in your Ballerina application, update t
 Import the `hubspot.crm.obj.leads` module and `oauth2` module.
 
 ```ballerina
-import ballerinax/hubspot.crm.obj.leads as leads;
+import ballerinax/hubspot.crm.obj.leads as hsleads;
 import ballerina/oauth2;
 ```
 
 ### Step 2: Instantiate a new connector
 
-1. Create a `Config.toml` file and, configure the obtained credentials in the above steps as follows:
-
-   ```toml
-    clientId = "<Client Id>"
-    clientSecret = "<Client Secret>"
-    refreshToken = "<Refresh Token>"
-   ```
-
-2. Instantiate a `hsLeads:ConnectionConfig` with the obtained credentials and initialize the connector with it.
+1. Instantiate a `hsLeads:ConnectionConfig` with the obtained credentials and initialize the connector with it.
 
     ```ballerina 
     configurable string clientId = ?;
     configurable string clientSecret = ?;
     configurable string refreshToken = ?;
 
-    final leads:ConnectionConfig auth = {
+    final hsleads:ConnectionConfig auth = {
          clientId,
          clientSecret,
          refreshToken,
          credentialBearer: oauth2:POST_BODY_BEARER
     };
 
-    final leads:Client hsLeads = check new ({auth});
+    final hsleads:Client hsLeads = check new ({auth});
     ```
+
+2. Create a `Config.toml` file and, configure the obtained credentials in the above steps as follows:
+
+   ```toml
+    clientId = "<Client Id>"
+    clientSecret = "<Client Secret>"
+    refreshToken = "<Refresh Token>"
+   ```
 
 ### Step 3: Invoke the connector operation
 
@@ -174,7 +174,7 @@ Now, utilize the available connector operations. A sample usecase is shown below
     
 ```ballerina
 public function main() returns error? {
-   hsLeads:SimplePublicObjectInputForCreate payload = {
+   hsleads:SimplePublicObjectInputForCreate payload = {
       {
          "associations": [
             {
@@ -194,7 +194,7 @@ public function main() returns error? {
          }
       }
    }
-   hsLeads:SimplePublicObject createLead = check hsLeads->/.post(payload);
+   hsleads:SimplePublicObject hsLeads = check hsLeads->/.post(payload);
 }
 ```
 
@@ -299,7 +299,7 @@ All the contributors are encouraged to read the [Ballerina Code of Conduct](http
 
 ## Useful links
 
-* For more information go to the [`hubspot.crm.object.leads` package](https://central.ballerina.io/ballerinax/hubspot.crm.object.leads/latest).
+* For more information go to the [`hubspot.crm.obj.leads` package](https://central.ballerina.io/ballerinax/hubspot.crm.obj.leads/latest).
 * For example demonstrations of the usage, go to [Ballerina By Examples](https://ballerina.io/learn/by-example/).
 * Chat live with us via our [Discord server](https://discord.gg/ballerinalang).
 * Post all technical questions on Stack Overflow with the [#ballerina](https://stackoverflow.com/questions/tagged/ballerina) tag.
