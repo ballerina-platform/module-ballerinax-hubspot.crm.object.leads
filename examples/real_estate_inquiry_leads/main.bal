@@ -25,16 +25,37 @@ configurable string clientSecret = ?;
 configurable string refreshToken = ?;
 
 // Client initialization
-final leads:Client hsLeads = check initClient();
-
-function initClient() returns leads:Client|error {
-    leads:OAuth2RefreshTokenGrantConfig auth = {
-        clientId: clientId,
-        clientSecret: clientSecret,
-        refreshToken: refreshToken,
+final leads:Client hsLeads = check new ({
+    auth: {
+        clientId,
+        clientSecret,
+        refreshToken,
         credentialBearer: oauth2:POST_BODY_BEARER
-    };
-    return new ({auth});
+    }
+});
+
+public function main() returns error? {
+    string contactId = "85187963930";
+
+    // Create new lead
+    leads:SimplePublicObject createdLead = check createLeadWithContact("John Doe", contactId);
+    io:println("Lead created with id: ", createdLead.id);
+
+    // Update lead
+    leads:SimplePublicObject updatedLead = check updateLeadName(createdLead.id, "Jane Doe");
+    io:println("Lead updated with name: ", updatedLead.properties["hs_lead_name"]);
+
+    // Get lead details
+    leads:SimplePublicObjectWithAssociations leadDetails = check getLeadById(createdLead.id);
+    io:println("Lead retrieved: ", leadDetails);
+
+    // Get all leads
+    leads:CollectionResponseSimplePublicObjectWithAssociationsForwardPaging allLeads = check getAllLeads();
+    io:println("Total leads: ", allLeads.results.length());
+
+    // Delete the created lead
+    http:Response deleteResponse = check deleteLead(createdLead.id);
+    io:println("Lead deleted successfully: ", deleteResponse.statusCode);
 }
 
 function createLeadWithContact(string leadName, string contactId) returns leads:SimplePublicObject|error {
@@ -81,28 +102,4 @@ function getAllLeads(boolean archived = false) returns leads:CollectionResponseS
 
 function deleteLead(string leadId) returns http:Response|error {
     return hsLeads->/[leadId].delete();
-}
-
-public function main() returns error? {
-    string contactId = "85187963930";
-
-    // Create new lead
-    leads:SimplePublicObject createdLead = check createLeadWithContact("John Doe", contactId);
-    io:println("Lead created with id: ", createdLead.id);
-
-    // Update lead
-    leads:SimplePublicObject updatedLead = check updateLeadName(createdLead.id, "Jane Doe");
-    io:println("Lead updated with name: ", updatedLead.properties["hs_lead_name"]);
-
-    // Get lead details
-    leads:SimplePublicObjectWithAssociations leadDetails = check getLeadById(createdLead.id);
-    io:println("Lead retrieved: ", leadDetails);
-
-    // Get all leads
-    leads:CollectionResponseSimplePublicObjectWithAssociationsForwardPaging allLeads = check getAllLeads();
-    io:println("Total leads: ", allLeads.results.length());
-
-    // Delete the created lead
-    http:Response deleteResponse = check deleteLead(createdLead.id);
-    io:println("Lead deleted successfully: ", deleteResponse.statusCode);
 }

@@ -27,9 +27,9 @@ configurable string refreshToken = ?;
 // Client initialization
 final leads:Client hsLeads = check new ({
     auth: {
-        clientId: clientId,
-        clientSecret: clientSecret,
-        refreshToken: refreshToken,
+        clientId,
+        clientSecret,
+        refreshToken,
         credentialBearer: oauth2:POST_BODY_BEARER
     }
 });
