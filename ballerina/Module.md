@@ -32,7 +32,7 @@ Within app developer accounts, you can [create developer test accounts](https://
 
    ![Hubspot developer testacc_creation_3](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-hubspot.crm.object.leads/main/docs/setup/resources/test_acc_3.png)
 
-### Step 3: Create a HubSpot App under your account.
+### Step 3: Create a HubSpot App under your account
 
 1. In your developer account, navigate to the "Apps" section. Click on "Create App"
 
@@ -40,7 +40,7 @@ Within app developer accounts, you can [create developer test accounts](https://
 
 2. Provide the necessary details, including the app name and description.
 
-### Step 4: Configure the Authentication Flow.
+### Step 4: Configure the Authentication Flow
 
 1. Move to the Auth Tab.
 
@@ -54,7 +54,7 @@ Within app developer accounts, you can [create developer test accounts](https://
 
    ![Hubspot app auth setup 2](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-hubspot.crm.object.leads/main/docs/setup/resources/scope_set.png)
 
-4. Add your Redirect URI in the relevant section. You can also use localhost addresses for local development purposes. Click Create App.
+3. Add your Redirect URI in the relevant section. You can also use localhost addresses for local development purposes. Click Create App.
 
    ![Hubspot app auth setup 3](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-hubspot.crm.object.leads/main/docs/setup/resources/create_app_final.png)
 
@@ -83,7 +83,6 @@ Before proceeding with the Quickstart, ensure you have obtained the Access Token
    ![Hubspot app install](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-hubspot.crm.object.leads/main/docs/setup/resources/install_app.png)
 
 3. A code will be displayed in the browser. Copy the code.
-
 
 4. Run the following curl command. Replace the `<YOUR_CLIENT_ID>`, `<YOUR_REDIRECT_URI>` and `<YOUR_CLIENT_SECRET>` with your specific value. Use the code you received in the above step 3 as the `<CODE>`.
 
@@ -135,7 +134,7 @@ import ballerina/oauth2;
 
 1. Instantiate a `hsLeads:ConnectionConfig` with the obtained credentials and initialize the connector with it.
 
-    ```ballerina 
+    ```ballerina
     configurable string clientId = ?;
     configurable string clientSecret = ?;
     configurable string refreshToken = ?;
@@ -152,18 +151,18 @@ import ballerina/oauth2;
 
 2. Create a `Config.toml` file and, configure the obtained credentials in the above steps as follows:
 
-   ```toml
+    ```toml
     clientId = "<Client Id>"
     clientSecret = "<Client Secret>"
     refreshToken = "<Refresh Token>"
-   ```
+    ```
 
 ### Step 3: Invoke the connector operation
 
 Now, utilize the available connector operations. A sample usecase is shown below.
 
 #### Create a Lead
-    
+
 ```ballerina
 public function main() returns error? {
    hsleads:SimplePublicObjectInputForCreate payload = {
