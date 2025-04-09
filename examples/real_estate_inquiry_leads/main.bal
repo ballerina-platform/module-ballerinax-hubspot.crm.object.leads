@@ -100,6 +100,6 @@ function getAllLeads(boolean archived = false) returns leads:CollectionResponseS
     return hsLeads->/.get(archived = archived);
 }
 
-function deleteLead(string leadId) returns http:Response|error {
+function deleteLead(string leadId) returns error? {
     return hsLeads->/[leadId].delete();
 }
