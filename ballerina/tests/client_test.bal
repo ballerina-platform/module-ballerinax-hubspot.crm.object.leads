@@ -14,7 +14,6 @@
 // specific language governing permissions and limitations
 // under the License.
 
-import ballerina/http;
 import ballerina/oauth2;
 import ballerina/os;
 import ballerina/test;
@@ -121,8 +120,8 @@ function testUpdateLead() returns error? {
     groups: ["live_tests", "mock_tests"]
 }
 function testDeleteLead() returns error? {
-    http:Response response = check hsLeads->/[testLeadCreatedId].delete();
-    test:assertEquals(response.statusCode, http:STATUS_NO_CONTENT);
+    error? response = hsLeads->/[testLeadCreatedId].delete();
+    test:assertEquals(response, ());
 }
 
 // Batch
@@ -238,6 +237,6 @@ function testBatchArchiveLeads() returns error? {
         inputs: [{id: testBatchCreateIds[0]}, {id: testBatchCreateIds[1]}]
     };
 
-    http:Response result = check hsLeads->/batch/archive.post(payload);
-    test:assertEquals(result.statusCode, http:STATUS_NO_CONTENT);
+    error? result = hsLeads->/batch/archive.post(payload);
+    test:assertEquals(result, ());
 }

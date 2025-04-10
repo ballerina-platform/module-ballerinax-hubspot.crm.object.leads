@@ -98,7 +98,7 @@ function batchUpdateLeads(string[] leadIds, string[] leadNames) returns leads:Ba
     return hsLeads->/batch/update.post(payload);
 }
 
-function batchArchiveLeads(string leadId1, string leadId2) returns http:Response|error {
+function batchArchiveLeads(string leadId1, string leadId2) returns error? {
     leads:BatchInputSimplePublicObjectId payload = {
         inputs: [{id: leadId1}, {id: leadId2}]
     };
