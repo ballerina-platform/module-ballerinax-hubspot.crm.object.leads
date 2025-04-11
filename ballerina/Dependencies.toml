@@ -55,6 +55,9 @@ dependencies = [
 	{org = "ballerina", name = "jballerina.java"},
 	{org = "ballerina", name = "lang.object"}
 ]
+modules = [
+	{org = "ballerina", packageName = "data.jsondata", moduleName = "data.jsondata"}
+]
 
 [[package]]
 org = "ballerina"
@@ -340,8 +343,9 @@ modules = [
 [[package]]
 org = "ballerinax"
 name = "hubspot.crm.obj.leads"
-version = "1.0.0"
+version = "2.0.0"
 dependencies = [
+	{org = "ballerina", name = "data.jsondata"},
 	{org = "ballerina", name = "http"},
 	{org = "ballerina", name = "oauth2"},
 	{org = "ballerina", name = "os"},
